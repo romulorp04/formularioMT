@@ -162,7 +162,12 @@ input.invalid,select.invalid{border-color:var(--danger);box-shadow:0 0 0 4px rgb
   .stepper-bar{position:static}.pv-row .k{min-width:140px}
 }
 @media print{
-  .util-bar,header.site,.stepper-bar,.form-nav,.fab,.proto-banner,.no-print{display:none!important}
-  body{background:#fff}main{padding:0;max-width:none}
+  .util-bar,header.site,.service-hero,.stepper-bar,.form-nav,.fab,.proto-banner,.no-print{display:none!important}
+  body{background:#fff}
+  main{padding:0;max-width:none}
   .card{box-shadow:none;border:none}
+  .card-head{display:none!important}
+  .page{display:none!important}
+  .page.show{display:block!important}
+  .alert.info.no-print{display:none!important}
 }
