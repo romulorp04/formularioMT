@@ -1,0 +1,53 @@
+/* pdf-doc.css — estilos do documento PDF (réplica da planilha Cemig) */
+#pdfDoc{position:fixed;left:0;top:0;width:760px;background:#fff;z-index:-1;opacity:0;pointer-events:none}
+#pdfDoc *{box-sizing:border-box;font-family:Arial,Helvetica,sans-serif}
+.pdf-page{width:760px;background:#fff;padding:0;position:relative;color:#000}
+.pdf-page+.pdf-page{margin-top:6px}
+/* cabeçalho */
+.pdfh{display:flex;align-items:center;border:1px solid #000;border-bottom:none}
+.pdfh .logos{padding:6px 10px;border-right:1px solid #000;display:flex;align-items:center;gap:6px;min-width:120px}
+.pdfh .logos .lg{width:40px;height:24px;background:linear-gradient(135deg,#00A859,#00753D);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:10px}
+.pdfh .logos .lg2{color:#00753D;font-weight:800;font-size:15px;background:none}
+.pdfh .ttl{flex:1;text-align:center;padding:5px 8px}
+.pdfh .ttl b{font-size:10px;font-weight:800;text-transform:uppercase;display:block;line-height:1.25}
+.pdfh .ttl small{font-size:7px;color:#333;display:block;margin-top:2px}
+/* barra de status */
+.pdf-status{border:1px solid #000;border-bottom:none;background:#f8d2d0;color:#a3261e;text-align:center;font-size:8.5px;font-weight:700;padding:4px}
+.pdf-legend{border:1px solid #000;border-bottom:none;font-size:7px;padding:2px 6px}
+.pdf-version{border:1px solid #000;border-bottom:none;background:#222;color:#fff;text-align:center;font-size:7.5px;font-weight:700;padding:2px}
+/* faixa de seção verde */
+.pdf-sec{border:1px solid #000;border-bottom:none;background:#1f7a44;color:#fff;font-size:8.5px;font-weight:800;padding:3px 8px;text-transform:none}
+.pdf-subsec{border:1px solid #000;border-bottom:none;background:#d9d9d9;text-align:center;font-size:8.5px;font-weight:800;padding:3px}
+/* grade de campos */
+.pdf-grid{border:1px solid #000;border-bottom:none;display:flex;flex-wrap:wrap}
+.pdf-grid:last-child{border-bottom:1px solid #000}
+.pdf-cell{border-right:1px solid #000;border-bottom:1px solid #000;padding:3px 6px;font-size:8px;min-height:20px;display:flex;flex-direction:column;justify-content:center}
+.pdf-cell.lbl{background:#fff;font-weight:400}
+.pdf-cell .k{font-size:7.5px;color:#000;font-weight:400}
+.pdf-cell .v{font-size:8.5px;font-weight:700;color:#0a0a0a;min-height:11px}
+.pdf-cell.inline{flex-direction:row;align-items:center;gap:6px}
+.pdf-cell.inline .k{white-space:nowrap}
+.pdf-cell.inline .v{flex:1;border-bottom:0}
+.w100{width:100%}.w50{width:50%}.w33{width:33.33%}.w25{width:25%}.w66{width:66.66%}.w75{width:75%}
+.w20{width:20%}.w40{width:40%}.w60{width:60%}.w80{width:80%}.w16{width:16.66%}
+.noR{border-right:none}
+/* tabelas */
+.pdf-tbl{width:100%;border-collapse:collapse;font-size:8px}
+.pdf-tbl th,.pdf-tbl td{border:1px solid #000;padding:2px 4px;text-align:center}
+.pdf-tbl th{background:#d9d9d9;font-weight:800;font-size:7.5px}
+.pdf-tbl .tot{background:#efefef;font-weight:800}
+.pdf-tbl-title{border:1px solid #000;border-bottom:none;background:#d9d9d9;text-align:center;font-weight:800;font-size:8.5px;padding:3px}
+/* texto livre / orientações */
+.pdf-text{border:1px solid #000;border-bottom:none;font-size:7px;padding:4px 6px;line-height:1.35}
+.pdf-text p{margin:0 0 3px}
+.pdf-text a{color:#00753D}
+/* ramal */
+.pdf-ramal-desc{border:1px solid #000;border-bottom:none;background:#efefef;font-size:8px;padding:4px 6px;line-height:1.4}
+.pdf-ramal-img{border:1px solid #000;border-bottom:none;text-align:center;padding:8px}
+.pdf-ramal-img img{max-width:60%;height:auto}
+/* assinatura */
+.pdf-sign{text-align:center;font-size:8px;padding:18px 0 4px}
+.pdf-sign .line{border-top:1px solid #000;width:60%;margin:22px auto 4px}
+.pdf-foot{font-size:7px;text-align:center;color:#333;margin-top:4px}
+
+.pdf-break{page-break-before:always;break-before:page}

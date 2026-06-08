@@ -5,16 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Formulário Orçamento de Conexão MT — Cemig</title>
 <link rel="stylesheet" href="css/estilos.css">
+<link rel="stylesheet" href="css/pdf-doc.css">
 </head>
 <body>
 
+<div class="proto-banner"><b>PROTÓTIPO FUNCIONAL</b> — identidade Cemig + motor de cálculo validado. Logo é placeholder (trocar pelo SVG oficial).</div>
+
+<div class="util-bar"><div class="wrap">
+  <a href="#">Recursos de acessibilidade</a><span class="divider"></span>
+  <a href="#">Aumentar contraste</a><span class="divider"></span>
+  <a href="#">PT</a><a href="#" style="opacity:.6">EN</a>
+</div></div>
 
 <header class="site"><div class="wrap">
-  <a href="#" class="logo"><img src="assets/logo-cemig.svg" alt="Cemig" height="44"></a>
-  <div style="display:flex;gap:10px">
-    <a href="https://www.atendimento.cemig.com.br/" target="_blank" rel="noopener" class="header-cta">CEMIG ATENDE</a>
-    <a href="https://partapr.cemig.com.br/PARTAPR/SelecaoModulo.aspx" target="_blank" rel="noopener" class="header-cta">APRWEB</a>
-  </div>
+  <a href="#" class="logo"><span class="mark">C</span><span class="word">Cemig<small>Distribuição</small></span><span class="logo-note">logo placeholder</span></a>
+  <a href="#" class="header-cta">CEMIG ATENDE</a>
 </div></header>
 
 <section class="service-hero"><div class="wrap">
@@ -81,9 +86,10 @@
         <div class="conditional-tag"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Campo dependente da finalidade</div>
         <div class="field"><label id="instalLabel">Informe o número da instalação <span class="req">*</span></label><input type="text" data-k="numInstalacao" placeholder="Nº da instalação"></div>
       </div>
-      <div class="grid cols-2" style="margin-top:16px">
-        <div class="field"><label>Telefone do RT — Celular</label><input type="tel" data-k="rtCelular" placeholder="(31) 90000-0000" onblur="onTel('rtCelular')"><span id="status-rtCelular" class="cep-status"></span></div>
-        <div class="field"><label>Telefone do RT — Fixo</label><input type="tel" data-k="rtFixo" placeholder="(31) 0000-0000" onblur="onTel('rtFixo')"><span id="status-rtFixo" class="cep-status"></span></div>
+      <div class="grid cols-3" style="margin-top:16px">
+        <div class="field"><label>Número da ART/TRT do Projeto</label><input type="text" data-k="artTrt" placeholder="Ex.: 0000000000000"></div>
+        <div class="field"><label>Telefone do RT — Celular</label><input type="tel" data-k="rtCelular" placeholder="(31) 90000-0000"></div>
+        <div class="field"><label>Telefone do RT — Fixo</label><input type="tel" data-k="rtFixo" placeholder="(31) 0000-0000"></div>
       </div>
       <div class="form-nav"><button class="btn btn-ghost" onclick="goTo(0)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Voltar</button>
         <span class="progress-mini">Etapa 1 de 5</span>
@@ -99,12 +105,12 @@
       <h2>2. Dados do Proprietário</h2><span class="step-tag">Etapa 2 de 5</span></div>
     <div class="card-body">
       <div class="grid cols-2">
-        <div class="field"><label>CPF / CNPJ <span class="req">*</span></label><input type="text" id="f_cpfcnpj" data-k="cpfCnpj" placeholder="000.000.000-00" oninput="onCpfCnpj()"><span class="field-note" id="cpfMsg"></span></div>
         <div class="field span-2"><label>Nome Completo ou Razão Social <span class="req">*</span></label><input type="text" data-k="nome" placeholder="Nome completo ou razão social"></div>
-        <div class="field"><label>Telefone do cliente <span class="req">*</span></label><input type="tel" data-k="telCliente" placeholder="(31) 90000-0000" onblur="onTel('telCliente')"><span id="status-telCliente" class="cep-status"></span></div>
-        <div class="field"><label>E-mail do cliente</label><input type="email" data-k="emailCliente" placeholder="email@exemplo.com" onblur="onEmail('emailCliente')"><span id="status-emailCliente" class="cep-status"></span></div>
-        <div class="field"><label>Telefone do solicitante</label><input type="tel" data-k="telSolicitante" placeholder="(31) 90000-0000" onblur="onTel('telSolicitante')"><span id="status-telSolicitante" class="cep-status"></span></div>
-        <div class="field"><label>E-mail do solicitante</label><input type="email" data-k="emailSolicitante" placeholder="email@exemplo.com" onblur="onEmail('emailSolicitante')"><span id="status-emailSolicitante" class="cep-status"></span></div>
+        <div class="field"><label>CPF / CNPJ <span class="req">*</span></label><input type="text" id="f_cpfcnpj" data-k="cpfCnpj" placeholder="000.000.000-00" oninput="onCpfCnpj()"><span class="field-note" id="cpfMsg"></span></div>
+        <div class="field"><label>Telefone do cliente <span class="req">*</span></label><input type="tel" data-k="telCliente" placeholder="(31) 90000-0000"></div>
+        <div class="field"><label>E-mail do cliente</label><input type="email" data-k="emailCliente" placeholder="email@exemplo.com"></div>
+        <div class="field"><label>Telefone do solicitante</label><input type="tel" data-k="telSolicitante" placeholder="(31) 90000-0000"></div>
+        <div class="field"><label>E-mail do solicitante</label><input type="email" data-k="emailSolicitante" placeholder="email@exemplo.com"></div>
       </div>
 
       <div class="subhead">3. E-mail ou Endereço para Correspondência / Entrega da Conta</div>
@@ -119,7 +125,7 @@
       <div class="grid cols-2" style="margin-top:16px">
         <div class="field"><label>Como deseja receber a correspondência?</label>
           <select data-k="formaCorresp" onchange="onCorresp()"><option value="">Selecione…</option><option>E-mail</option><option>Endereço</option><option>Agência Correios(Caixa Postal)</option></select></div>
-        <div class="field" id="correspEmailBox" style="display:none"><label>Informar e-mail</label><input type="email" data-k="emailCorresp" placeholder="email@exemplo.com" onblur="onEmail('emailCorresp')"><span id="status-emailCorresp" class="cep-status"></span></div>
+        <div class="field" id="correspEmailBox" style="display:none"><label>Informar e-mail</label><input type="email" data-k="emailCorresp" placeholder="email@exemplo.com"></div>
       </div>
 
       <div id="endCorrespBox" style="display:none">
@@ -130,7 +136,7 @@
             <div class="field"><label>Nº</label><input type="text" data-k="ec_num"></div>
             <div class="field span-2"><label>Complemento</label><input type="text" data-k="ec_compl"></div>
             <div class="field"><label>Bairro / Distrito</label><input type="text" data-k="ec_bairro"></div>
-            <div class="field"><label>CEP</label><input type="text" data-k="ec_cep" placeholder="00000-000" onblur="onCEP('ec')"><span id="cep-status-ec" class="cep-status"></span></div>
+            <div class="field"><label>CEP</label><input type="text" data-k="ec_cep" placeholder="00000-000"></div>
             <div class="field span-2"><label>Município</label><input type="text" data-k="ec_municipio"></div>
             <div class="field"><label>Estado</label><input type="text" data-k="ec_estado" value="MG"></div>
           </div>
@@ -161,9 +167,9 @@
       <div id="irrigacaoAlert"></div>
 
       <div class="grid cols-4" style="margin-top:16px">
+        <div class="field"><label>CEP <span class="req">*</span></label><input type="text" data-k="uc_cep" placeholder="00000-000"></div>
         <div class="field"><label>Localização <span class="req">*</span></label>
           <select id="f_localizacao" data-k="localizacao" onchange="onLocalizacao()"><option value="">Selecione…</option><option>Urbana</option><option>Rural</option></select></div>
-        <div class="field"><label>CEP <span class="req">*</span></label><input type="text" data-k="uc_cep" placeholder="00000-000" onblur="onCEP('uc')"><span id="cep-status-uc" class="cep-status"></span></div>
         <div class="field"><label>Município <span class="req">*</span></label><input type="text" data-k="uc_municipio"></div>
         <div class="field"><label>Estado <span class="req">*</span></label><input type="text" data-k="uc_estado" value="MG"></div>
       </div>
@@ -382,8 +388,11 @@
   </div>
 </div>
 
+<script src="js/lib/html2pdf.bundle.min.js"></script>
 <script src="js/calculo.js"></script>
 <script src="js/dados.js"></script>
+<script src="js/ramais-b64.js"></script>
 <script src="js/app.js"></script>
+<script src="js/pdf.js"></script>
 </body>
 </html>

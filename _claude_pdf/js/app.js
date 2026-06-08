@@ -48,28 +48,12 @@ function onFinalidade(){
 }
 
 /* ===== Etapa 2: CPF/CNPJ, vencimento, correspondência ===== */
-async function onCpfCnpj(){
+function onCpfCnpj(){
   const el=$('#f_cpfcnpj'), msg=$('#cpfMsg'); state.cpfCnpj=el.value;
   const r=CalculoMT.validarCpfCnpj(el.value);
   if(!el.value){el.classList.remove('invalid');msg.textContent='';msg.className='field-note';return;}
-  if(!r.valido){el.classList.add('invalid');msg.textContent=(r.tipo||'Documento')+' inválido';msg.className='field-err';return;}
-  el.classList.remove('invalid');
-  if(r.tipo==='CNPJ'){
-    msg.textContent='verificando empresa…';msg.className='field-note';
-    try{
-      const res=await fetch(`https://brasilapi.com.br/api/cnpj/v1/${el.value.replace(/\D/g,'')}`);
-      if(res.ok){
-        const d=await res.json();
-        const ativo=(d.descricao_situacao_cadastral||'').toUpperCase()==='ATIVA';
-        msg.textContent=`✓ ${d.razao_social} — ${d.descricao_situacao_cadastral}`;
-        msg.className=ativo?'field-ok':'field-err';
-        const nomeEl=$('[data-k="nome"]');
-        if(nomeEl&&!nomeEl.value){nomeEl.value=d.razao_social;nomeEl.dispatchEvent(new Event('input'));}
-      } else {msg.textContent='CNPJ válido ✓';msg.className='field-ok';}
-    }catch(_){msg.textContent='CNPJ válido ✓';msg.className='field-ok';}
-  } else {
-    msg.textContent=r.tipo+' válido ✓';msg.className='field-ok';
-  }
+  if(r.valido){el.classList.remove('invalid');msg.textContent=r.tipo+' válido ✓';msg.className='field-ok';}
+  else{el.classList.add('invalid');msg.textContent=(r.tipo||'Documento')+' inválido';msg.className='field-err';}
 }
 function onVenc(){const v=event.target.value;state.desejaVenc=v;$('#vencDiaBox').style.display=(v==='Sim')?'flex':'none';}
 function onCorresp(){const v=event.target.value;state.formaCorresp=v;
@@ -98,40 +82,10 @@ function updateCoordHint(){
   $('#lonLabel').innerHTML=ehNova?'Longitude <span class="req">*</span>':'Longitude atual';
   $('#coordNovaBox').style.display=(state.finalidade && !ehNova)?'grid':'none';
 }
-function _utmBandLetter(lat){
-  const B='CDEFGHJKLMNPQRSTUVWXX';
-  return lat<-80?'C':lat>84?'X':B[Math.floor((lat+80)/8)];
-}
-function latLonParaUTM(lat,lon){
-  const a=6378137,f=1/298.257223563,k0=0.9996;
-  const b=a*(1-f),e2=1-(b*b)/(a*a);
-  const latR=lat*Math.PI/180,lonR=lon*Math.PI/180;
-  const zona=Math.floor((lon+180)/6)+1;
-  const lonC=((zona-1)*6-180+3)*Math.PI/180;
-  const sinL=Math.sin(latR),cosL=Math.cos(latR),tanL=Math.tan(latR);
-  const N=a/Math.sqrt(1-e2*sinL**2);
-  const T=tanL**2,C=e2/(1-e2)*cosL**2,A=cosL*(lonR-lonC);
-  const e4=e2*e2,e6=e4*e2,ep2=e2/(1-e2);
-  const M=a*((1-e2/4-3*e4/64-5*e6/256)*latR
-    -(3*e2/8+3*e4/32+45*e6/1024)*Math.sin(2*latR)
-    +(15*e4/256+45*e6/1024)*Math.sin(4*latR)
-    -(35*e6/3072)*Math.sin(6*latR));
-  const E=k0*N*(A+(1-T+C)*A**3/6+(5-18*T+T*T+72*C-58*ep2)*A**5/120)+500000;
-  let Nort=k0*(M+N*tanL*(A*A/2+(5-T+9*C+4*C*C)*A**4/24+(61-58*T+T*T+600*C-330*ep2)*A**6/720));
-  if(lat<0) Nort+=10000000;
-  return {zona,hemisferio:lat<0?'S':'N',easting:Math.round(E),northing:Math.round(Nort)};
-}
-
 function onCoord(){
   state.latitude=$('[data-k=latitude]').value; state.longitude=$('[data-k=longitude]').value;
   const r=CalculoMT.validarCoordenadas(state.latitude,state.longitude);
   $('#coordAlert').innerHTML = r.nivel==='erro' ? alertHTML('err',r.msg) : '';
-  const lat=parseFloat(state.latitude),lon=parseFloat(state.longitude);
-  if(!isNaN(lat)&&!isNaN(lon)){
-    const u=latLonParaUTM(lat,lon);
-    const utmEl=$('[data-k=utm]');
-    if(utmEl) utmEl.value=`${u.zona}${_utmBandLetter(lat)} E:${u.easting} N:${u.northing}`;
-  }
 }
 function onAmbiental(){
   state.app=$('[data-k=app]').value; state.reservaLegal=$('[data-k=reservaLegal]').value;
@@ -148,25 +102,6 @@ function onSubPronta(){
   else box.innerHTML='';
 }
 
-/* ===== Validação de e-mail e telefone ===== */
-function _validarEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);}
-function _validarTelefone(v){
-  const d=v.replace(/\D/g,'');
-  if(d.length<10||d.length>11) return false;
-  const ddd=parseInt(d.substring(0,2),10);
-  if(ddd<11||ddd>99) return false;
-  if(d.length===11&&d[2]!=='9') return false;
-  return true;
-}
-function _feedbackCampo(el,spanId,valido,msgErr){
-  const sp=$('#'+spanId);
-  if(!el||!el.value){if(el)el.classList.remove('invalid');if(sp){sp.textContent='';sp.className='cep-status';}return;}
-  if(valido){el.classList.remove('invalid');if(sp){sp.textContent='';}}
-  else{el.classList.add('invalid');if(sp){sp.textContent=msgErr;sp.className='cep-status err';}}
-}
-function onEmail(k){const el=$(`[data-k="${k}"]`);_feedbackCampo(el,`status-${k}`,_validarEmail(el.value),'e-mail inválido');}
-function onTel(k){const el=$(`[data-k="${k}"]`);_feedbackCampo(el,`status-${k}`,_validarTelefone(el.value),'telefone inválido');}
-
 /* ===== Etapa 4: compartilhada, trafos, motores ===== */
 function onCompartilhada(){
   state.compartilhada=$('#f_compartilhada').value;
@@ -177,7 +112,7 @@ function onCompartilhada(){
 }
 
 /* --- Transformadores --- */
-function addTrafo(){ trafos.push({potencia:'',quantidade:'',relacao:'8'}); renderTrafos(); }
+function addTrafo(){ trafos.push({potencia:'',quantidade:'',relacao:''}); renderTrafos(); }
 function delTrafo(i){ trafos.splice(i,1); renderTrafos(); recalcTecnico(); }
 function renderTrafos(){
   const tb=$('#trafoBody'); tb.innerHTML='';
@@ -389,48 +324,7 @@ function renderPreview(){
 }
 function syncState(){$$('[data-k]').forEach(el=>{state[el.dataset.k]=el.value;});}
 
-/* ===== CEP autopreenchimento ===== */
-async function buscarCEP(cep){
-  cep=cep.replace(/\D/g,'');
-  if(cep.length!==8) return null;
-  try{
-    const r=await fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`);
-    if(r.ok){
-      const d=await r.json();
-      const coords=d.location?.coordinates;
-      return {logradouro:d.street||'',bairro:d.neighborhood||'',cidade:d.city||'',uf:d.state||'',
-              latitude:coords?.latitude??null,longitude:coords?.longitude??null};
-    }
-  }catch(_){}
-  try{
-    const r=await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-    if(r.ok){const d=await r.json();if(d.erro) return null;
-      return {logradouro:d.logradouro||'',bairro:d.bairro||'',cidade:d.localidade||'',uf:d.uf||'',
-              latitude:null,longitude:null};}
-  }catch(_){}
-  return null;
-}
-function _setField(k,v){const el=$(`[data-k="${k}"]`);if(!el||v==null)return;el.value=v;el.dispatchEvent(new Event('input'));}
-async function onCEP(prefixo){
-  const st=$(`#cep-status-${prefixo}`);
-  if(st){st.textContent='buscando…';st.className='cep-status';}
-  const cepEl=$(`[data-k="${prefixo==='uc'?'uc_cep':'ec_cep'}"]`);
-  const d=await buscarCEP(cepEl?.value||'');
-  if(!d){if(st){st.textContent='CEP não encontrado';st.className='cep-status err';}return;}
-  if(st) st.textContent='';
-  if(prefixo==='uc'){
-    _setField('uc_municipio',d.cidade);_setField('uc_estado',d.uf);
-    if(state.localizacao==='Urbana'){_setField('urb_endereco',d.logradouro);_setField('urb_bairro',d.bairro);}
-    if(d.latitude!=null) _setField('latitude',d.latitude);
-    if(d.longitude!=null) _setField('longitude',d.longitude);
-  } else {
-    _setField('ec_rua',d.logradouro);_setField('ec_bairro',d.bairro);
-    _setField('ec_municipio',d.cidade);_setField('ec_estado',d.uf);
-  }
-}
-
-/* ===== Exportar PDF ===== */
-function exportarPDF(){ window.print(); }
+/* ===== Exportar PDF — implementado em pdf.js ===== */
 
 /* ===== Modal Anexo II ===== */
 function abrirAnexoII(){$('#modalAnexo').classList.add('show');}
