@@ -44,7 +44,7 @@ function onFinalidade(){
   const ehNova=(v==='Conexão Nova');
   $('#blocoConexaoNova').style.display=ehNova?'block':'none';
   $('#blocoAlteracao').style.display=(v && !ehNova)?'block':'none';
-  updateCoordHint(); recalcTecnico();
+  updateCoordHint(); updateDemandaLabels(); recalcTecnico();
 }
 
 /* ===== Etapa 2: CPF/CNPJ, vencimento, correspondência ===== */
@@ -262,29 +262,86 @@ function preencherTiposSE(){
   }
 }
 
-function onModalidade(){state.modalidade=$('#f_modalidade').value;validarDemandas();updateDemandaLabels();}
-function onEscalonada(){state.escalonada=$('#f_escalonada').value;updateDemandaLabels();}
+function onModalidade(){state.modalidade=$('#f_modalidade').value;updateDemandaLabels();validarDemandas();}
+function onEscalonada(){
+  state.escalonada=$('#f_escalonada').value;
+  $('#escalonadaBox').style.display=(state.escalonada==='Sim')?'block':'none';
+  if(state.escalonada==='Sim') renderEscalonada();
+}
 function updateDemandaLabels(){
-  // simplificação: ponta/fora ponta aparecem se Azul
   const azul=(state.modalidade==='Azul');
-  $('#dem3Box').style.display=azul?'flex':'none';
-  $('#dem4Box').style.display=(azul && (state.finalidade!=='Conexão Nova'))?'flex':'none';
-  const ehNova=(state.finalidade==='Conexão Nova');
-  $('#dem2Box').style.display=ehNova?'none':'flex';
-  $('#dem1Lbl').innerHTML = ehNova ? 'Demanda contratada (kW) <span class="req">*</span>' : 'Demanda atual (kW) <span class="req">*</span>';
+  const ehAlteracao=(state.finalidade==='Aumento de Demanda'||state.finalidade==='Redução de Demanda');
+  ['dem_atual','dem_futura','dem_ponta_atual','dem_ponta_futura','dem_foraponta_atual','dem_foraponta_futura']
+    .forEach(k=>{const b=$(`#box_${k}`);if(b)b.style.display='none';});
+  function show(k,lbl){const b=$(`#box_${k}`);const l=$(`#lbl_${k}`);if(b)b.style.display='';if(l&&lbl)l.innerHTML=lbl;}
+  if(ehAlteracao && !azul){
+    show('dem_atual','Demanda Atual (kW) <span class="req">*</span>');
+    show('dem_futura','Demanda Futura (kW) <span class="req">*</span>');
+  } else if(ehAlteracao && azul){
+    show('dem_ponta_atual','Demanda Ponta Atual (kW) <span class="req">*</span>');
+    show('dem_ponta_futura','Ponta Futura (kW) <span class="req">*</span>');
+    show('dem_foraponta_atual','Fora de Ponta Atual (kW) <span class="req">*</span>');
+    show('dem_foraponta_futura','Fora de Ponta Futura (kW) <span class="req">*</span>');
+  } else if(!ehAlteracao && !azul){
+    show('dem_atual','Informar demanda em kW <span class="req">*</span>');
+  } else {
+    show('dem_ponta_atual','Demanda Ponta (kW) <span class="req">*</span>');
+    show('dem_foraponta_atual','Demanda Fora de Ponta (kW) <span class="req">*</span>');
+  }
 }
 function validarDemandas(){
-  const d1=$('[data-k=demanda1]')?.value, d2=$('[data-k=demanda2]')?.value;
+  const azul=(state.modalidade==='Azul');
+  const ehAlteracao=(state.finalidade==='Aumento de Demanda'||state.finalidade==='Redução de Demanda');
   const out=[];
-  const rNova=CalculoMT.validarDemandaConexaoNova(d1,state.finalidade);
-  if(rNova.nivel)out.push(rNova);
-  const rPot=CalculoMT.validarDemandaVsPotencia(d1,state.potTotalTrafos);
+  let dAtual, dFutura;
+  if(azul){
+    const pa=parseFloat($('[data-k=dem_ponta_atual]')?.value)||0;
+    const fa=parseFloat($('[data-k=dem_foraponta_atual]')?.value)||0;
+    const pf=parseFloat($('[data-k=dem_ponta_futura]')?.value)||0;
+    const ff=parseFloat($('[data-k=dem_foraponta_futura]')?.value)||0;
+    dAtual=(pa||fa)?String(pa+fa):'';
+    dFutura=(pf||ff)?String(pf+ff):'';
+  } else {
+    dAtual=$('[data-k=dem_atual]')?.value||'';
+    dFutura=$('[data-k=dem_futura]')?.value||'';
+  }
+  if(!ehAlteracao){
+    const rNova=CalculoMT.validarDemandaConexaoNova(dAtual,state.finalidade);
+    if(rNova.nivel)out.push(rNova);
+  }
+  const rPot=CalculoMT.validarDemandaVsPotencia(dAtual,state.potTotalTrafos);
   if(rPot.nivel)out.push(rPot);
-  if(state.finalidade!=='Conexão Nova'){
-    const rFut=CalculoMT.validarDemandaFuturaVsAtual(state.finalidade,d1,d2);
+  if(ehAlteracao&&dAtual&&dFutura){
+    const rFut=CalculoMT.validarDemandaFuturaVsAtual(state.finalidade,dAtual,dFutura);
     if(rFut.nivel)out.push(rFut);
   }
   $('#demandaAlert').innerHTML=out.map(r=>alertHTML('err',r.msg)).join('');
+}
+
+/* ===== Demanda Escalonada ===== */
+let escalonada=[];
+function addEscalonada(){escalonada.push({demanda:'',ponta:'',foraponta:'',inicio:''});renderEscalonada();}
+function delEscalonada(i){escalonada.splice(i,1);renderEscalonada();}
+function renderEscalonada(){
+  const azul=(state.modalidade==='Azul');
+  const head=$('#escalonadaHead'),body=$('#escalonadaBody');
+  if(!head||!body) return;
+  head.innerHTML=azul
+    ?'<tr><th>Ponta (kW)</th><th>Fora de Ponta (kW)</th><th>Início de Uso</th><th style="width:46px"></th></tr>'
+    :'<tr><th>Demanda Futura (kW)</th><th>Início de Uso</th><th style="width:46px"></th></tr>';
+  body.innerHTML='';
+  escalonada.forEach((e,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=azul
+      ?`<td><input type="number" step="any" value="${e.ponta}" placeholder="kW" oninput="escalonada[${i}].ponta=this.value"></td>
+         <td><input type="number" step="any" value="${e.foraponta}" placeholder="kW" oninput="escalonada[${i}].foraponta=this.value"></td>
+         <td><input type="month" value="${e.inicio}" oninput="escalonada[${i}].inicio=this.value"></td>
+         <td><button class="btn-del" onclick="delEscalonada(${i})">×</button></td>`
+      :`<td><input type="number" step="any" value="${e.demanda}" placeholder="kW" oninput="escalonada[${i}].demanda=this.value"></td>
+         <td><input type="month" value="${e.inicio}" oninput="escalonada[${i}].inicio=this.value"></td>
+         <td><button class="btn-del" onclick="delEscalonada(${i})">×</button></td>`;
+    body.appendChild(tr);
+  });
 }
 
 /* ===== Alteração: troca de SE ===== */
@@ -376,8 +433,25 @@ function renderPreview(){
   h+=pvRow('Tipo de Subestação',tipoSE);
   if(state.finalidade!=='Conexão Nova')h+=pvRow('Troca de Subestação?',state.alt_troca);
   h+=pvRow('Tarifa monômia?',state.monomia)+pvRow('Modalidade tarifária',state.modalidade)+pvRow('Demanda escalonada?',state.escalonada);
-  h+=pvRow(state.finalidade==='Conexão Nova'?'Demanda contratada (kW)':'Demanda atual (kW)',state.demanda1);
-  if(state.finalidade!=='Conexão Nova')h+=pvRow('Demanda futura (kW)',state.demanda2);
+  const azulPv=(state.modalidade==='Azul');
+  const ehAltPv=(state.finalidade==='Aumento de Demanda'||state.finalidade==='Redução de Demanda');
+  if(azulPv){
+    h+=pvRow('Demanda Ponta Atual (kW)',state.dem_ponta_atual);
+    if(ehAltPv)h+=pvRow('Ponta Futura (kW)',state.dem_ponta_futura);
+    h+=pvRow('Fora de Ponta Atual (kW)',state.dem_foraponta_atual);
+    if(ehAltPv)h+=pvRow('Fora de Ponta Futura (kW)',state.dem_foraponta_futura);
+  } else {
+    h+=pvRow(ehAltPv?'Demanda Atual (kW)':'Demanda (kW)',state.dem_atual);
+    if(ehAltPv)h+=pvRow('Demanda Futura (kW)',state.dem_futura);
+  }
+  if(escalonada.length){
+    let et=azulPv?'<table class="tbl"><thead><tr><th>Ponta (kW)</th><th>Fora-ponta (kW)</th><th>Início de Uso</th></tr></thead><tbody>'
+                 :'<table class="tbl"><thead><tr><th>Demanda Futura (kW)</th><th>Início de Uso</th></tr></thead><tbody>';
+    escalonada.forEach(e=>{et+=azulPv?`<tr><td>${e.ponta||'—'}</td><td>${e.foraponta||'—'}</td><td>${e.inicio||'—'}</td></tr>`
+                                     :`<tr><td>${e.demanda||'—'}</td><td>${e.inicio||'—'}</td></tr>`;});
+    et+='</tbody></table>';
+    h+=`<div class="pv-row"><div class="k">Demanda Escalonada</div><div class="v">${et}</div></div>`;
+  }
   h+=pvRow('Geração paralelismo momentâneo',state.gerMomentaneo)+pvRow('GRID ZERO',state.gridZero)+pvRow('BT na mesma propriedade',state.btMesmaProp);
   // ramal selecionado
   if(state.ramalIndice!=null){

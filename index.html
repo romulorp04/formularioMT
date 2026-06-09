@@ -317,12 +317,25 @@
       <div id="monomiaAlert"></div>
 
       <div class="grid cols-2" id="demandaBox" style="margin-top:16px">
-        <div class="field"><label id="dem1Lbl">Demanda contratada (kW) <span class="req">*</span></label><input type="number" step="any" data-k="demanda1" oninput="recalcTecnico()"></div>
-        <div class="field" id="dem2Box"><label id="dem2Lbl">Demanda futura (kW) <span class="req">*</span></label><input type="number" step="any" data-k="demanda2" oninput="recalcTecnico()"></div>
-        <div class="field" id="dem3Box" style="display:none"><label id="dem3Lbl">Demanda fora de ponta (kW)</label><input type="number" step="any" data-k="demanda3"></div>
-        <div class="field" id="dem4Box" style="display:none"><label id="dem4Lbl">Fora ponta futura (kW)</label><input type="number" step="any" data-k="demanda4"></div>
+        <div class="field" id="box_dem_atual"            style="display:none"><label id="lbl_dem_atual"></label><input type="number" step="any" data-k="dem_atual" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_futura"           style="display:none"><label id="lbl_dem_futura"></label><input type="number" step="any" data-k="dem_futura" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_ponta_atual"      style="display:none"><label id="lbl_dem_ponta_atual"></label><input type="number" step="any" data-k="dem_ponta_atual" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_ponta_futura"     style="display:none"><label id="lbl_dem_ponta_futura"></label><input type="number" step="any" data-k="dem_ponta_futura" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_foraponta_atual"  style="display:none"><label id="lbl_dem_foraponta_atual"></label><input type="number" step="any" data-k="dem_foraponta_atual" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_foraponta_futura" style="display:none"><label id="lbl_dem_foraponta_futura"></label><input type="number" step="any" data-k="dem_foraponta_futura" oninput="recalcTecnico()"></div>
       </div>
       <div id="demandaAlert"></div>
+
+      <div id="escalonadaBox" style="display:none">
+        <div class="subhead">Demanda Escalonada</div>
+        <div class="tbl-scroll">
+          <table class="tbl" id="escalonadaTbl">
+            <thead id="escalonadaHead"></thead>
+            <tbody id="escalonadaBody"></tbody>
+          </table>
+        </div>
+        <button class="btn-add" onclick="addEscalonada()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar etapa de demanda</button>
+      </div>
 
       <!-- Geração -->
       <div class="subhead">Geração e Baixa Tensão</div>
