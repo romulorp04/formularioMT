@@ -239,10 +239,24 @@
           <select id="f_tensaoMT" data-k="tensaoMT" onchange="recalcTecnico()"><option value="">Selecione…</option><option value="13.8">13,8 kV</option><option value="22">22 kV</option><option value="34.5">34,5 kV</option></select></div>
         <div class="field"><label>Subestação compartilhada (multimedição)?</label>
           <select id="f_compartilhada" data-k="compartilhada" onchange="onCompartilhada()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
-        <div class="field" id="qtdCubiculosBox" style="display:none"><label>Quantos cubículos?</label><input type="number" min="1" data-k="qtdCubiculos" placeholder="Ex.: 2"></div>
+        <div class="field" id="qtdCubiculosBox" style="display:none"><label>Quantos cubículos?</label><input type="number" min="1" data-k="qtdCubiculos" placeholder="Ex.: 2" oninput="sincronizarCubiculos()"></div>
       </div>
       <div id="compartilhadaAlert"></div>
 
+      <div id="cubiculosBox" style="display:none">
+        <div class="subhead">Cubículos da Subestação Compartilhada</div>
+        <div id="cubiculosCards"></div>
+      </div>
+
+      <div id="blocoTecnicoIndividual">
+      <div id="blocoTotaisConsolidados" style="display:none">
+        <div class="subhead">Totais Consolidados (Cubículos)</div>
+        <div class="grid cols-2">
+          <div class="field"><label>Soma dos transformadores (kVA)</label><input type="text" id="totConsolidadoTrafos" readonly></div>
+          <div class="field"><label>Soma das demandas (kW)</label><input type="text" id="totConsolidadoDemanda" readonly></div>
+        </div>
+      </div>
+      <div id="blocoTrafosIndividual">
       <!-- TRANSFORMADORES -->
       <div class="subhead">Transformador(es) <span class="req">*</span></div>
       <div class="tbl-scroll">
@@ -253,7 +267,9 @@
         </table>
       </div>
       <button class="btn-add" onclick="addTrafo()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar transformador</button>
+      </div>
 
+      <div id="blocoMotoresIndividual">
       <!-- MOTORES / CARGAS ESPECIAIS -->
       <div class="subhead">Motores / Cargas Especiais <span class="opt">(preencha se houver)</span></div>
       <div class="tbl-scroll">
@@ -266,6 +282,7 @@
         </table>
       </div>
       <button class="btn-add" onclick="addMotor()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar motor</button>
+      </div>
 
       <!-- Carga operante na partida — OCULTO temporariamente (a pedido) -->
       <div id="blocoCargaOperante" style="display:none">
@@ -284,6 +301,7 @@
           <div class="field"><label>Potência (Transformadores) <span class="req">*</span></label><input type="text" id="cn_pot" data-k="cn_pot" readonly></div>
           <div class="field"><label>Quantidade (Transformadores) <span class="req">*</span></label><input type="text" id="cn_qtd" data-k="cn_qtd" readonly></div>
           <div class="field"><label>Tipo de Subestação <span class="req">*</span></label><select id="cn_tipoSE" data-k="cn_tipoSE" onchange="recalcRamal()"><option value="">Selecione…</option></select></div>
+          <div class="field span-full"><div class="se-gallery" id="seGallery_nova"></div></div>
         </div>
       </div>
       <div id="blocoAlteracao" style="display:none">
@@ -299,11 +317,14 @@
             <select id="alt_troca" data-k="alt_troca" onchange="onTrocaSE()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
           <div class="field" id="alt_tipoAtualBox"><label id="alt_tipoAtualLbl">Tipo de Subestação atual <span class="req">*</span></label>
             <select id="alt_tipoAtual" data-k="alt_tipoAtual" onchange="recalcRamal()"><option value="">Selecione…</option><option>Subestação Nº 1</option><option>Subestação Nº 2</option><option>Subestação Nº 4</option><option>Subestação Nº 5</option><option>Subestação Nº 6</option><option>Subestação Nº 8</option></select></div>
+          <div class="field span-full"><div class="se-gallery" id="seGallery_atual"></div></div>
           <div class="field" id="alt_tipoParaBox" style="display:none"><label>Tipo de Subestação (Para) <span class="req">*</span></label>
             <select id="alt_tipoPara" data-k="alt_tipoPara" onchange="recalcRamal()"><option value="">Selecione…</option></select></div>
+          <div class="field span-full" id="seGalleryBox_para" style="display:none"><div class="se-gallery" id="seGallery_para"></div></div>
         </div>
       </div>
 
+      <div id="blocoTarifacaoDemanda">
       <!-- Tarifa monômia -->
       <div class="subhead">Tarifação e Demanda</div>
       <div class="grid cols-3">
@@ -336,6 +357,7 @@
         </div>
         <button class="btn-add" onclick="addEscalonada()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar etapa de demanda</button>
       </div>
+      </div>
 
       <!-- Geração -->
       <div class="subhead">Geração e Baixa Tensão</div>
@@ -348,6 +370,7 @@
         <div class="field" id="gridZeroPotBox" style="display:none"><label>Informar potência da geração (kVA)</label><input type="number" step="any" data-k="gridZeroPot"></div>
         <div class="field"><label>Possui unidades consumidoras de Baixa Tensão (BT) na mesma propriedade? <span class="req">*</span></label>
           <select data-k="btMesmaProp"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+      </div>
       </div>
 
       <!-- RAMAL DE ENTRADA (galeria visual) -->
@@ -396,6 +419,7 @@
 
 <script src="js/calculo.js"></script>
 <script src="js/dados.js"></script>
+<script src="js/subestacoes-b64.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

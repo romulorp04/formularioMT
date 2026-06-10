@@ -1,0 +1,8 @@
+PACOTE — Imagens dos tipos de subestação (com a Nº 8 NOVA)
+============================================================
+Descompacte DENTRO da pasta do projeto (c:\Projetos\formularioMT), mesclando:
+  assets/subestacoes/subestacao_{1,2,4,5,8}.png  -> assets/subestacoes/
+  js/subestacoes-b64.js                           -> js/
+
+A subestacao_8.png agora é a versão definitiva (com transformador e chave fusível).
+Depois de colocar os arquivos, rode o prompt de implementação no Claude Code.

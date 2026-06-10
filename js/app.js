@@ -2,6 +2,8 @@
 const state = {};
 let trafos = [];   // {potencia, quantidade, relacao}
 let motores = [];  // {tipo, cv, fp, rend, volts, ipIn, tempo, dispositivo}
+let cubiculos = []; // Anexo I — cubículos adicionais da subestação compartilhada
+                     // {instalacao, trafos:[{potencia,quantidade,relacao}], modalidade, demanda, demandaPonta, demandaForaPonta}
 let ramalSelecionado = null;
 
 /* ATIVIDADES e DISPOSITIVOS agora em dados.js */
@@ -170,9 +172,16 @@ function onTel(k){const el=$(`[data-k="${k}"]`);_feedbackCampo(el,`status-${k}`,
 /* ===== Etapa 4: compartilhada, trafos, motores ===== */
 function onCompartilhada(){
   state.compartilhada=$('#f_compartilhada').value;
-  $('#qtdCubiculosBox').style.display=(state.compartilhada==='Sim')?'flex':'none';
-  $('#compartilhadaAlert').innerHTML = state.compartilhada==='Sim'
-    ? alertHTML('info','Preencha as informações do cubículo principal abaixo e os demais cubículos no Anexo I — Unidades Adicionais. Após o orçamento e assinatura do CUSD, deverá ser solicitada a análise de projeto de cada UC de forma individualizada.') : '';
+  const compart=(state.compartilhada==='Sim');
+  $('#qtdCubiculosBox').style.display=compart?'flex':'none';
+  $('#cubiculosBox').style.display=compart?'block':'none';
+  $('#blocoTrafosIndividual').style.display=compart?'none':'block';
+  $('#blocoMotoresIndividual').style.display=compart?'none':'block';
+  $('#blocoTarifacaoDemanda').style.display=compart?'none':'block';
+  $('#blocoTotaisConsolidados').style.display=compart?'block':'none';
+  $('#compartilhadaAlert').innerHTML = compart
+    ? alertHTML('info','Preencha os dados de cada cubículo abaixo. Após o orçamento e assinatura do CUSD, deverá ser solicitada a análise de projeto de cada UC de forma individualizada.') : '';
+  sincronizarCubiculos();
   recalcTecnico();
 }
 
@@ -190,6 +199,77 @@ function renderTrafos(){
       <td><button class="btn-del" onclick="delTrafo(${i})">×</button></td>`;
     tb.appendChild(tr);
   });
+}
+
+/* --- Cubículos adicionais (Anexo I) --- */
+function sincronizarCubiculos(){
+  const qtd=parseInt($('[data-k="qtdCubiculos"]')?.value)||0;
+  const n=(state.compartilhada==='Sim') ? Math.max(1,qtd) : 0;
+  while(cubiculos.length<n) cubiculos.push({instalacao:'',trafos:[{potencia:'',quantidade:'',relacao:'8'}],modalidade:'',demanda:'',demandaPonta:'',demandaForaPonta:''});
+  cubiculos.length=n;
+  renderCubiculos();
+}
+function addTrafoCub(i){ cubiculos[i].trafos.push({potencia:'',quantidade:'',relacao:'8'}); renderCubiculos(); }
+function delTrafoCub(i,j){ cubiculos[i].trafos.splice(j,1); renderCubiculos(); }
+function recalcCubiculo(i){
+  const rt=CalculoMT.calcularTrafos(cubiculos[i].trafos);
+  const elPot=$('#cubTrafoPot'+i), elQtd=$('#cubTrafoQtd'+i);
+  if(elPot) elPot.textContent=fmt(rt.potenciaTotal);
+  if(elQtd) elQtd.textContent=rt.quantidadeTotal;
+  recalcTecnico();
+}
+function demandaRepresentativaCubiculo(c){
+  if(c.modalidade==='Azul'){
+    const p=parseFloat(c.demandaPonta)||0, f=parseFloat(c.demandaForaPonta)||0;
+    return Math.max(p,f);
+  }
+  return parseFloat(c.demanda)||0;
+}
+function totaisCubiculos(){
+  let potenciaTotal=0, quantidadeTotal=0, demandaTotal=0;
+  cubiculos.forEach(c=>{
+    const rt=CalculoMT.calcularTrafos(c.trafos);
+    potenciaTotal+=rt.potenciaTotal;
+    quantidadeTotal+=rt.quantidadeTotal;
+    demandaTotal+=demandaRepresentativaCubiculo(c);
+  });
+  return {potenciaTotal,quantidadeTotal,demandaTotal};
+}
+function renderCubiculos(){
+  const box=$('#cubiculosCards'); if(!box) return;
+  box.innerHTML = cubiculos.map((c,i)=>{
+    const rt=CalculoMT.calcularTrafos(c.trafos);
+    const trafoRows=c.trafos.map((t,j)=>`<tr>
+      <td>TRF${String(j+1).padStart(2,'0')}</td>
+      <td><input type="number" step="any" value="${t.potencia}" placeholder="Ex.: 300" oninput="cubiculos[${i}].trafos[${j}].potencia=this.value;recalcCubiculo(${i})"></td>
+      <td><input type="number" value="${t.quantidade}" placeholder="Ex.: 1" oninput="cubiculos[${i}].trafos[${j}].quantidade=this.value;recalcCubiculo(${i})"></td>
+      <td><input type="number" step="any" value="${t.relacao}" placeholder="Ex.: 8" oninput="cubiculos[${i}].trafos[${j}].relacao=this.value"></td>
+      <td><button class="btn-del" onclick="delTrafoCub(${i},${j})">×</button></td>
+    </tr>`).join('');
+    const azul=(c.modalidade==='Azul');
+    const demandaFields = azul
+      ? `<div class="field"><label>Demanda Ponta (kW)</label><input type="number" step="any" value="${c.demandaPonta}" oninput="cubiculos[${i}].demandaPonta=this.value;recalcTecnico()"></div>
+         <div class="field"><label>Demanda Fora de Ponta (kW)</label><input type="number" step="any" value="${c.demandaForaPonta}" oninput="cubiculos[${i}].demandaForaPonta=this.value;recalcTecnico()"></div>`
+      : `<div class="field"><label>Demanda (kW)</label><input type="number" step="any" value="${c.demanda}" oninput="cubiculos[${i}].demanda=this.value;recalcTecnico()"></div>`;
+    return `<div class="conditional" style="margin-top:14px">
+      <div class="conditional-tag">Cubículo ${i+1}</div>
+      <div class="field"><label>N° Instalação</label><input type="text" value="${c.instalacao}" placeholder="Nº da instalação" oninput="cubiculos[${i}].instalacao=this.value"></div>
+      <div class="tbl-scroll">
+        <table class="tbl">
+          <thead><tr><th style="width:70px">Trafo</th><th>Potência (kVA)</th><th>Qtde</th><th>Relação I mag / I nominal</th><th style="width:46px"></th></tr></thead>
+          <tbody>${trafoRows}</tbody>
+          <tfoot><tr><td>Σ</td><td class="calc" id="cubTrafoPot${i}">${fmt(rt.potenciaTotal)}</td><td class="calc" id="cubTrafoQtd${i}">${rt.quantidadeTotal}</td><td colspan="2"></td></tr></tfoot>
+        </table>
+      </div>
+      <button class="btn-add" onclick="addTrafoCub(${i})"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar transformador</button>
+      <div class="grid cols-2" style="margin-top:14px">
+        <div class="field"><label>Modalidade tarifária horária</label>
+          <select onchange="cubiculos[${i}].modalidade=this.value;renderCubiculos()"><option value="">Selecione…</option><option ${c.modalidade==='Verde'?'selected':''}>Verde</option><option ${c.modalidade==='Azul'?'selected':''}>Azul</option></select></div>
+        ${demandaFields}
+      </div>
+    </div>`;
+  }).join('');
+  recalcTecnico();
 }
 
 /* --- Motores --- */
@@ -222,8 +302,10 @@ function renderMotores(){
 /* ===== Recalcular bloco técnico (trafos, tipo SE, demanda) ===== */
 function recalcTecnico(){
   state.tensaoMT=$('#f_tensaoMT')?.value||state.tensaoMT;
-  // trafos
-  const rt=CalculoMT.calcularTrafos(trafos.map(t=>({potencia:t.potencia,quantidade:t.quantidade})));
+  // trafos (ou totais consolidados dos cubículos, se compartilhada)
+  const rt=(state.compartilhada==='Sim')
+    ? totaisCubiculos()
+    : CalculoMT.calcularTrafos(trafos.map(t=>({potencia:t.potencia,quantidade:t.quantidade})));
   state.potTotalTrafos=rt.potenciaTotal; state.qtdTotalTrafos=rt.quantidadeTotal;
   $('#trafoPotTotal').textContent=fmt(rt.potenciaTotal);
   $('#trafoQtdTotal').textContent=rt.quantidadeTotal;
@@ -232,6 +314,11 @@ function recalcTecnico(){
   if($('#cn_qtd')){$('#cn_qtd').value=rt.quantidadeTotal;state.cn_qtd=rt.quantidadeTotal;}
   if($('#alt_potFutura')){$('#alt_potFutura').value=fmt(rt.potenciaTotal);state.alt_potFutura=rt.potenciaTotal;}
   if($('#alt_qtdFutura')){$('#alt_qtdFutura').value=rt.quantidadeTotal;state.alt_qtdFutura=rt.quantidadeTotal;}
+  if(state.compartilhada==='Sim'){
+    state.demandaTotalCubiculos=rt.demandaTotal;
+    if($('#totConsolidadoTrafos'))$('#totConsolidadoTrafos').value=fmt(rt.potenciaTotal);
+    if($('#totConsolidadoDemanda'))$('#totConsolidadoDemanda').value=fmt(rt.demandaTotal);
+  }
   renderMotores();
   // tipo de subestação automático
   preencherTiposSE();
@@ -260,6 +347,33 @@ function preencherTiposSE(){
     const atual=selPara.value;
     selPara.innerHTML='<option value="">Selecione…</option>'+lista.map(s=>`<option ${atual===s?'selected':''}>${s}</option>`).join('');
   }
+  renderGaleriaSE('seGallery_nova','cn_tipoSE');
+  renderGaleriaSE('seGallery_atual','alt_tipoAtual');
+  renderGaleriaSE('seGallery_para','alt_tipoPara');
+}
+
+/* ===== Galeria visual de tipos de subestação ===== */
+const SE_GALLERY_MAP={cn_tipoSE:'seGallery_nova',alt_tipoAtual:'seGallery_atual',alt_tipoPara:'seGallery_para'};
+function renderGaleriaSE(containerId,selectId){
+  const cont=$('#'+containerId), sel=$('#'+selectId);
+  if(!cont||!sel) return;
+  const opts=[...sel.options].filter(o=>o.value!=='');
+  cont.innerHTML=opts.map(o=>{
+    const m=o.value.match(/(\d+)/);
+    const img=m&&SUBESTACAO_IMGS[m[1]];
+    const sel_=(o.value===sel.value)?'selected':'';
+    return `<div class="se-card ${sel_}" onclick="selecionarSE('${selectId}','${o.value}')">
+      ${img?`<img src="${img}" alt="${o.value}">`:''}
+      <div class="lbl">${o.value}</div>
+    </div>`;
+  }).join('');
+}
+function selecionarSE(selectId,value){
+  const sel=$('#'+selectId);
+  if(!sel) return;
+  sel.value=value;
+  if(typeof sel.onchange==='function') sel.onchange();
+  renderGaleriaSE(SE_GALLERY_MAP[selectId],selectId);
 }
 
 function onModalidade(){state.modalidade=$('#f_modalidade').value;updateDemandaLabels();validarDemandas();}
@@ -348,6 +462,7 @@ function renderEscalonada(){
 function onTrocaSE(){
   state.alt_troca=$('#alt_troca').value;
   $('#alt_tipoParaBox').style.display=(state.alt_troca==='Sim')?'flex':'none';
+  $('#seGalleryBox_para').style.display=(state.alt_troca==='Sim')?'block':'none';
   $('#alt_tipoAtualLbl').innerHTML=(state.alt_troca==='Sim')?'Tipo de Subestação (De) <span class="req">*</span>':'Tipo de Subestação atual <span class="req">*</span>';
   recalcRamal();
 }
@@ -420,37 +535,58 @@ function renderPreview(){
   h+=pvRow('APP / Unid. Conservação',state.app)+pvRow('Reserva Legal',state.reservaLegal)+pvRow('Subestação pronta?',state.subPronta);
   h+=`<h4>5. Dados Técnicos</h4>`;
   h+=pvRow('Nível de tensão MT',state.tensaoMT?state.tensaoMT.replace('.',',')+' kV':'')+pvRow('Compartilhada?',state.compartilhada);
-  // tabela trafos
-  if(trafos.length){let tt='<table class="tbl"><thead><tr><th>Trafo</th><th>Pot (kVA)</th><th>Qtde</th><th>Rel. Imag/In</th></tr></thead><tbody>';
-    trafos.forEach((t,i)=>{tt+=`<tr><td>TRF${String(i+1).padStart(2,'0')}</td><td>${t.potencia||'—'}</td><td>${t.quantidade||'—'}</td><td>${t.relacao||'—'}</td></tr>`;});
-    tt+=`</tbody><tfoot><tr><td>Σ</td><td>${fmt(state.potTotalTrafos)}</td><td>${state.qtdTotalTrafos||0}</td><td></td></tr></tfoot></table>`;
-    h+=`<div class="pv-row"><div class="k">Transformadores</div><div class="v">${tt}</div></div>`;}
-  if(motores.length){let mt='<table class="tbl"><thead><tr><th>Tipo</th><th>CV</th><th>FP</th><th>η</th><th>V</th><th>Ip/In</th><th>I nom</th><th>I part</th></tr></thead><tbody>';
-    motores.forEach(m=>{const c=CalculoMT.calcularMotor({potenciaCV:m.cv,fp:m.fp,rendimento:m.rend,tensaoV:m.volts,relacaoIpIn:m.ipIn},parseFloat(state.tensaoMT));
-      mt+=`<tr><td>${m.tipo||'—'}</td><td>${m.cv||'—'}</td><td>${m.fp||'—'}</td><td>${m.rend||'—'}</td><td>${m.volts||'—'}</td><td>${m.ipIn||'—'}</td><td>${fmt(c.iNominal)}</td><td>${fmt(c.iPartida)}</td></tr>`;});
-    mt+='</tbody></table>';
-    h+=`<div class="pv-row"><div class="k">Motores</div><div class="v">${mt}</div></div>`;}
-  h+=pvRow('Tipo de Subestação',tipoSE);
-  if(state.finalidade!=='Conexão Nova')h+=pvRow('Troca de Subestação?',state.alt_troca);
-  h+=pvRow('Tarifa monômia?',state.monomia)+pvRow('Modalidade tarifária',state.modalidade)+pvRow('Demanda escalonada?',state.escalonada);
-  const azulPv=(state.modalidade==='Azul');
-  const ehAltPv=(state.finalidade==='Aumento de Demanda'||state.finalidade==='Redução de Demanda');
-  if(azulPv){
-    h+=pvRow('Demanda Ponta Atual (kW)',state.dem_ponta_atual);
-    if(ehAltPv)h+=pvRow('Ponta Futura (kW)',state.dem_ponta_futura);
-    h+=pvRow('Fora de Ponta Atual (kW)',state.dem_foraponta_atual);
-    if(ehAltPv)h+=pvRow('Fora de Ponta Futura (kW)',state.dem_foraponta_futura);
+  if(state.compartilhada==='Sim'){
+    h+=pvRow('Soma dos transformadores (kVA)',fmt(state.potTotalTrafos));
+    h+=pvRow('Soma das demandas (kW)',fmt(state.demandaTotalCubiculos));
+    h+=pvRow('Tipo de Subestação',tipoSE);
   } else {
-    h+=pvRow(ehAltPv?'Demanda Atual (kW)':'Demanda (kW)',state.dem_atual);
-    if(ehAltPv)h+=pvRow('Demanda Futura (kW)',state.dem_futura);
+    // tabela trafos
+    if(trafos.length){let tt='<table class="tbl"><thead><tr><th>Trafo</th><th>Pot (kVA)</th><th>Qtde</th><th>Rel. Imag/In</th></tr></thead><tbody>';
+      trafos.forEach((t,i)=>{tt+=`<tr><td>TRF${String(i+1).padStart(2,'0')}</td><td>${t.potencia||'—'}</td><td>${t.quantidade||'—'}</td><td>${t.relacao||'—'}</td></tr>`;});
+      tt+=`</tbody><tfoot><tr><td>Σ</td><td>${fmt(state.potTotalTrafos)}</td><td>${state.qtdTotalTrafos||0}</td><td></td></tr></tfoot></table>`;
+      h+=`<div class="pv-row"><div class="k">Transformadores</div><div class="v">${tt}</div></div>`;}
+    if(motores.length){let mt='<table class="tbl"><thead><tr><th>Tipo</th><th>CV</th><th>FP</th><th>η</th><th>V</th><th>Ip/In</th><th>I nom</th><th>I part</th></tr></thead><tbody>';
+      motores.forEach(m=>{const c=CalculoMT.calcularMotor({potenciaCV:m.cv,fp:m.fp,rendimento:m.rend,tensaoV:m.volts,relacaoIpIn:m.ipIn},parseFloat(state.tensaoMT));
+        mt+=`<tr><td>${m.tipo||'—'}</td><td>${m.cv||'—'}</td><td>${m.fp||'—'}</td><td>${m.rend||'—'}</td><td>${m.volts||'—'}</td><td>${m.ipIn||'—'}</td><td>${fmt(c.iNominal)}</td><td>${fmt(c.iPartida)}</td></tr>`;});
+      mt+='</tbody></table>';
+      h+=`<div class="pv-row"><div class="k">Motores</div><div class="v">${mt}</div></div>`;}
+    h+=pvRow('Tipo de Subestação',tipoSE);
+    if(state.finalidade!=='Conexão Nova')h+=pvRow('Troca de Subestação?',state.alt_troca);
+    h+=pvRow('Tarifa monômia?',state.monomia)+pvRow('Modalidade tarifária',state.modalidade)+pvRow('Demanda escalonada?',state.escalonada);
+    const azulPv=(state.modalidade==='Azul');
+    const ehAltPv=(state.finalidade==='Aumento de Demanda'||state.finalidade==='Redução de Demanda');
+    if(azulPv){
+      h+=pvRow('Demanda Ponta Atual (kW)',state.dem_ponta_atual);
+      if(ehAltPv)h+=pvRow('Ponta Futura (kW)',state.dem_ponta_futura);
+      h+=pvRow('Fora de Ponta Atual (kW)',state.dem_foraponta_atual);
+      if(ehAltPv)h+=pvRow('Fora de Ponta Futura (kW)',state.dem_foraponta_futura);
+    } else {
+      h+=pvRow(ehAltPv?'Demanda Atual (kW)':'Demanda (kW)',state.dem_atual);
+      if(ehAltPv)h+=pvRow('Demanda Futura (kW)',state.dem_futura);
+    }
+    if(escalonada.length){
+      let et=azulPv?'<table class="tbl"><thead><tr><th>Ponta (kW)</th><th>Fora-ponta (kW)</th><th>Início de Uso</th></tr></thead><tbody>'
+                   :'<table class="tbl"><thead><tr><th>Demanda Futura (kW)</th><th>Início de Uso</th></tr></thead><tbody>';
+      escalonada.forEach(e=>{et+=azulPv?`<tr><td>${e.ponta||'—'}</td><td>${e.foraponta||'—'}</td><td>${e.inicio||'—'}</td></tr>`
+                                       :`<tr><td>${e.demanda||'—'}</td><td>${e.inicio||'—'}</td></tr>`;});
+      et+='</tbody></table>';
+      h+=`<div class="pv-row"><div class="k">Demanda Escalonada</div><div class="v">${et}</div></div>`;
+    }
   }
-  if(escalonada.length){
-    let et=azulPv?'<table class="tbl"><thead><tr><th>Ponta (kW)</th><th>Fora-ponta (kW)</th><th>Início de Uso</th></tr></thead><tbody>'
-                 :'<table class="tbl"><thead><tr><th>Demanda Futura (kW)</th><th>Início de Uso</th></tr></thead><tbody>';
-    escalonada.forEach(e=>{et+=azulPv?`<tr><td>${e.ponta||'—'}</td><td>${e.foraponta||'—'}</td><td>${e.inicio||'—'}</td></tr>`
-                                     :`<tr><td>${e.demanda||'—'}</td><td>${e.inicio||'—'}</td></tr>`;});
-    et+='</tbody></table>';
-    h+=`<div class="pv-row"><div class="k">Demanda Escalonada</div><div class="v">${et}</div></div>`;
+  if(cubiculos.length){
+    h+=`<h4>Cubículos da Subestação Compartilhada</h4>`;
+    cubiculos.forEach((c,i)=>{
+      const rt=CalculoMT.calcularTrafos(c.trafos);
+      h+=pvRow(`Cubículo ${i+1} — Nº Instalação`,c.instalacao);
+      h+=pvRow(`Cubículo ${i+1} — Transformadores`,`${fmt(rt.potenciaTotal)} kVA / ${rt.quantidadeTotal} un.`);
+      h+=pvRow(`Cubículo ${i+1} — Modalidade tarifária`,c.modalidade);
+      if(c.modalidade==='Azul'){
+        h+=pvRow(`Cubículo ${i+1} — Demanda Ponta (kW)`,c.demandaPonta);
+        h+=pvRow(`Cubículo ${i+1} — Demanda Fora de Ponta (kW)`,c.demandaForaPonta);
+      } else {
+        h+=pvRow(`Cubículo ${i+1} — Demanda (kW)`,c.demanda);
+      }
+    });
   }
   h+=pvRow('Geração paralelismo momentâneo',state.gerMomentaneo)+pvRow('GRID ZERO',state.gridZero)+pvRow('BT na mesma propriedade',state.btMesmaProp);
   // ramal selecionado
