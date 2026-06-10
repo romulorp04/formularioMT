@@ -361,8 +361,10 @@ function renderGaleriaSE(containerId,selectId){
   cont.innerHTML=opts.map(o=>{
     const m=o.value.match(/(\d+)/);
     const img=m&&SUBESTACAO_IMGS[m[1]];
+    const info=m&&SUBESTACAO_INFO[m[1]];
     const sel_=(o.value===sel.value)?'selected':'';
     return `<div class="se-card ${sel_}" onclick="selecionarSE('${selectId}','${o.value}')">
+      ${info?`<span class="se-info">i<span class="se-tooltip">${info}</span></span>`:''}
       ${img?`<img src="${img}" alt="${o.value}">`:''}
       <div class="lbl">${o.value}</div>
     </div>`;
