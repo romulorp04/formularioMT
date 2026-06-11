@@ -47,6 +47,7 @@ function onFinalidade(){
   $('#blocoConexaoNova').style.display=ehNova?'block':'none';
   $('#blocoAlteracao').style.display=(v && !ehNova)?'block':'none';
   updateCoordHint(); updateDemandaLabels(); recalcTecnico();
+  if(state.compartilhada==='Sim') renderCubiculos();
 }
 
 /* ===== Etapa 2: CPF/CNPJ, vencimento, correspondência ===== */
@@ -95,10 +96,29 @@ function onLocalizacao(){
 }
 function updateCoordHint(){
   const ehNova=(state.finalidade==='Conexão Nova');
-  $('#coordHint').textContent=ehNova?'Informe as coordenadas do local de atendimento.':'Haverá mudança do local da subestação? Se sim, informe as novas coordenadas e as antigas.';
-  $('#latLabel').innerHTML=ehNova?'Latitude <span class="req">*</span>':'Latitude atual';
-  $('#lonLabel').innerHTML=ehNova?'Longitude <span class="req">*</span>':'Longitude atual';
-  $('#coordNovaBox').style.display=(state.finalidade && !ehNova)?'grid':'none';
+  $('#mudancaLocalBox').style.display=(state.finalidade && !ehNova)?'block':'none';
+  if(ehNova){
+    $('#coordHint').textContent='Informe as coordenadas do local de atendimento.';
+    $('#latLabel').innerHTML='Latitude <span class="req">*</span>';
+    $('#lonLabel').innerHTML='Longitude <span class="req">*</span>';
+    $('#coordNovaBox').style.display='none';
+  } else if(state.finalidade){
+    $('#coordHint').textContent='Informe as coordenadas do local de atendimento atual. Caso haja mudança de local, informe também as novas coordenadas.';
+    onMudancaLocal();
+  } else {
+    $('#coordHint').textContent='Informe as coordenadas do local de atendimento.';
+    $('#latLabel').innerHTML='Latitude <span class="req">*</span>';
+    $('#lonLabel').innerHTML='Longitude <span class="req">*</span>';
+    $('#coordNovaBox').style.display='none';
+  }
+}
+function onMudancaLocal(){
+  state.mudancaLocal=$('#f_mudancaLocal')?.value||'';
+  const sim=(state.mudancaLocal==='Sim');
+  $('#coordNovaBox').style.display=sim?'grid':'none';
+  $('#latLabel').innerHTML=sim?'Latitude atual <span class="req">*</span>':'Latitude';
+  $('#lonLabel').innerHTML=sim?'Longitude atual <span class="req">*</span>':'Longitude';
+  onCoord();
 }
 function _utmBandLetter(lat){
   const B='CDEFGHJKLMNPQRSTUVWXX';
@@ -126,14 +146,28 @@ function latLonParaUTM(lat,lon){
 
 function onCoord(){
   state.latitude=$('[data-k=latitude]').value; state.longitude=$('[data-k=longitude]').value;
+  state.latitudeNova=$('[data-k=latitudeNova]')?.value||'';
+  state.longitudeNova=$('[data-k=longitudeNova]')?.value||'';
   const r=CalculoMT.validarCoordenadas(state.latitude,state.longitude);
-  $('#coordAlert').innerHTML = r.nivel==='erro' ? alertHTML('err',r.msg) : '';
   const lat=parseFloat(state.latitude),lon=parseFloat(state.longitude);
   if(!isNaN(lat)&&!isNaN(lon)){
     const u=latLonParaUTM(lat,lon);
     const utmEl=$('[data-k=utm]');
     if(utmEl) utmEl.value=`${u.zona}${_utmBandLetter(lat)} E:${u.easting} N:${u.northing}`;
   }
+  let erros=[];
+  if(r.nivel==='erro') erros.push(r.msg);
+  if($('#coordNovaBox').style.display!=='none'){
+    const rNova=CalculoMT.validarCoordenadas(state.latitudeNova,state.longitudeNova);
+    if(rNova.nivel==='erro') erros.push(rNova.msg);
+    const latN=parseFloat(state.latitudeNova),lonN=parseFloat(state.longitudeNova);
+    if(!isNaN(latN)&&!isNaN(lonN)){
+      const uN=latLonParaUTM(latN,lonN);
+      const utmNovaEl=$('[data-k=utmNova]');
+      if(utmNovaEl) utmNovaEl.value=`${uN.zona}${_utmBandLetter(latN)} E:${uN.easting} N:${uN.northing}`;
+    }
+  }
+  $('#coordAlert').innerHTML = erros.length ? alertHTML('err',erros.join(' ')) : '';
 }
 function onAmbiental(){
   state.app=$('[data-k=app]').value; state.reservaLegal=$('[data-k=reservaLegal]').value;
@@ -253,7 +287,7 @@ function renderCubiculos(){
       : `<div class="field"><label>Demanda (kW)</label><input type="number" step="any" value="${c.demanda}" oninput="cubiculos[${i}].demanda=this.value;recalcTecnico()"></div>`;
     return `<div class="conditional" style="margin-top:14px">
       <div class="conditional-tag">Cubículo ${i+1}</div>
-      <div class="field"><label>N° Instalação</label><input type="text" value="${c.instalacao}" placeholder="Nº da instalação" oninput="cubiculos[${i}].instalacao=this.value"></div>
+      ${state.finalidade!=='Conexão Nova' ? `<div class="field"><label>N° Instalação</label><input type="text" value="${c.instalacao}" placeholder="Nº da instalação" oninput="cubiculos[${i}].instalacao=this.value"></div>` : ''}
       <div class="tbl-scroll">
         <table class="tbl">
           <thead><tr><th style="width:70px">Trafo</th><th>Potência (kVA)</th><th>Qtde</th><th>Relação I mag / I nominal</th><th style="width:46px"></th></tr></thead>
@@ -341,11 +375,22 @@ function preencherTiposSE(){
     selNova.innerHTML='<option value="">Selecione…</option>'+lista.map(s=>`<option ${atual===s?'selected':''}>${s}</option>`).join('');
     if(lista.length===1){selNova.value=lista[0];state.cn_tipoSE=lista[0];}
   }
+  // popula dropdown "Tipo de Subestação atual" da alteração
+  const selAtual=$('#alt_tipoAtual');
+  if(selAtual){
+    const baseAtual=['Subestação Nº 1','Subestação Nº 2','Subestação Nº 4','Subestação Nº 5','Subestação Nº 6','Subestação Nº 8'];
+    const listaAtual=CalculoMT.filtrarTiposPorPotencia(baseAtual,state.potTotalTrafos);
+    const atual=selAtual.value;
+    const manter=listaAtual.includes(atual);
+    selAtual.innerHTML='<option value="">Selecione…</option>'+listaAtual.map(s=>`<option ${manter&&atual===s?'selected':''}>${s}</option>`).join('');
+    if(!manter){selAtual.value='';state.alt_tipoAtual='';}
+  }
   // popula dropdown "Para" da alteração
   const selPara=$('#alt_tipoPara');
   if(selPara){
     const atual=selPara.value;
-    selPara.innerHTML='<option value="">Selecione…</option>'+lista.map(s=>`<option ${atual===s?'selected':''}>${s}</option>`).join('');
+    const listaPara=CalculoMT.filtrarTiposPorPotencia(lista,state.potTotalTrafos);
+    selPara.innerHTML='<option value="">Selecione…</option>'+listaPara.map(s=>`<option ${atual===s?'selected':''}>${s}</option>`).join('');
   }
   renderGaleriaSE('seGallery_nova','cn_tipoSE');
   renderGaleriaSE('seGallery_atual','alt_tipoAtual');

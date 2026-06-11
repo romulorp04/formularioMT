@@ -190,6 +190,14 @@ const CalculoMT = (function () {
     return []; // cenário sem definição (ex.: potência ≤ 29 kVA ou campos vazios)
   }
 
+  // Subestações Nº 1, 5, 6 e 8 só existem para potências até 300 kVA
+  const SE_LIMITADAS_300KVA = ['Subestação Nº 1', SE.N5, 'Subestação Nº 6', SE.N8];
+  function filtrarTiposPorPotencia(tipos, potencia) {
+    const p = parseFloat(potencia) || 0;
+    if (p > 300) return tipos.filter(t => !SE_LIMITADAS_300KVA.includes(t));
+    return [...tipos];
+  }
+
   /* =======================================================================
      BLOCO 6 — Ramal de entrada sugerido
      Espelha CALCULOS!C130 → retorna um GRUPO de índices possíveis
@@ -393,7 +401,7 @@ const CalculoMT = (function () {
     // bloco 3
     calcularMotor, calcularMotores,
     // bloco 5
-    tiposSubestacaoPermitidos, SE,
+    tiposSubestacaoPermitidos, filtrarTiposPorPotencia, SE,
     // bloco 6
     grupoRamal, textoRamal, imagemRamal, RAMAIS,
     // bloco 7

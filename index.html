@@ -18,7 +18,10 @@
 </div></header>
 
 <section class="service-hero"><div class="wrap">
-<h1>Formulário — Orçamento de Conexão / Alteração de Carga Urbana ou Rural em Média Tensão</h1>
+<h1 class="hero-title">
+  <span class="hero-title-main font-ssbroad">Formulário</span>
+  <span class="hero-title-sub">Orçamento de Conexão / Alteração de Carga Urbana ou Rural em Média Tensão</span>
+</h1>
   <p class="sub">Preenchimento digital pelo cliente ou Responsável Técnico para solicitações em Média Tensão (MT).</p>
 </div></section>
 
@@ -169,18 +172,24 @@
 
       <div class="subhead">Coordenadas do local de atendimento</div>
       <p class="field-note" id="coordHint" style="margin-bottom:12px">Informe as coordenadas do local de atendimento.</p>
+      <div class="field" id="mudancaLocalBox" style="display:none;margin-bottom:12px">
+        <label>Haverá mudança do local da subestação? <span class="req">*</span></label>
+        <select id="f_mudancaLocal" data-k="mudancaLocal" onchange="onMudancaLocal()">
+          <option value="">Selecione…</option><option>Sim</option><option>Não</option>
+        </select>
+      </div>
       <div class="grid cols-4">
         <div class="field"><label>Fuso</label><select data-k="fuso"><option value="">—</option><option>22°</option><option>23°</option><option>24°</option></select></div>
         <div class="field"><label id="latLabel">Latitude <span class="req">*</span></label><input type="number" step="any" data-k="latitude" placeholder="-19.92" oninput="onCoord()"></div>
         <div class="field"><label id="lonLabel">Longitude <span class="req">*</span></label><input type="number" step="any" data-k="longitude" placeholder="-43.94" oninput="onCoord()"></div>
-        <div class="field"><label>Coordenada em UTM</label><input type="text" data-k="utm" placeholder="(opcional)"></div>
+        <div class="field"><label>Coordenada em UTM</label><input type="text" data-k="utm" placeholder="(calculado)" readonly></div>
       </div>
-      <!-- coordenadas novas (quando não é conexão nova) -->
+      <!-- coordenadas novas (quando há mudança de local) -->
       <div class="grid cols-4" id="coordNovaBox" style="display:none;margin-top:12px">
         <div class="field"></div>
         <div class="field"><label>Latitude nova <span class="req">*</span></label><input type="number" step="any" data-k="latitudeNova" placeholder="-19.92" oninput="onCoord()"></div>
         <div class="field"><label>Longitude nova <span class="req">*</span></label><input type="number" step="any" data-k="longitudeNova" placeholder="-43.94" oninput="onCoord()"></div>
-        <div class="field"></div>
+        <div class="field"><label>UTM (novo)</label><input type="text" data-k="utmNova" readonly placeholder="(calculado)"></div>
       </div>
       <div id="coordAlert"></div>
 
@@ -316,7 +325,7 @@
           <div class="field"><label>Haverá troca do tipo de subestação? <span class="req">*</span></label>
             <select id="alt_troca" data-k="alt_troca" onchange="onTrocaSE()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
           <div class="field" id="alt_tipoAtualBox"><label id="alt_tipoAtualLbl">Tipo de Subestação atual <span class="req">*</span></label>
-            <select id="alt_tipoAtual" data-k="alt_tipoAtual" onchange="recalcRamal()"><option value="">Selecione…</option><option>Subestação Nº 1</option><option>Subestação Nº 2</option><option>Subestação Nº 4</option><option>Subestação Nº 5</option><option>Subestação Nº 6</option><option>Subestação Nº 8</option></select></div>
+            <select id="alt_tipoAtual" data-k="alt_tipoAtual" onchange="recalcRamal()"><option value="">Selecione…</option></select></div>
           <div class="field span-full"><div class="se-gallery" id="seGallery_atual"></div></div>
           <div class="field" id="alt_tipoParaBox" style="display:none"><label>Tipo de Subestação (Para) <span class="req">*</span></label>
             <select id="alt_tipoPara" data-k="alt_tipoPara" onchange="recalcRamal()"><option value="">Selecione…</option></select></div>

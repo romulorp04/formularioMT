@@ -173,5 +173,12 @@ const aggOk = C.validarTudo({
 });
 check('validarTudo cenário válido → pode avançar', aggOk.podeAvancar, true);
 
+console.log('\n===== BLOCO 8 — Filtro de subestações por potência =====');
+const baseSE = ['Subestação Nº 1','Subestação Nº 2','Subestação Nº 4','Subestação Nº 5','Subestação Nº 6','Subestação Nº 8'];
+check('200kVA → mantém os 6 tipos',
+  J(C.filtrarTiposPorPotencia(baseSE, 200)), J(baseSE));
+check('500kVA → apenas [Nº2,Nº4]',
+  J(C.filtrarTiposPorPotencia(baseSE, 500)), J(['Subestação Nº 2','Subestação Nº 4']));
+
 console.log(`\n===== RESULTADO: ${pass} OK / ${fail} FALHA =====\n`);
 process.exit(fail ? 1 : 0);
