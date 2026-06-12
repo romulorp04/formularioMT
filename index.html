@@ -316,7 +316,7 @@
       <div id="blocoAlteracao" style="display:none">
         <div class="subhead">Para Alteração de Demanda</div>
         <div class="grid cols-3">
-          <div class="field"><label>Potência (Trafos) atual <span class="req">*</span></label><input type="number" step="any" data-k="alt_potAtual"></div>
+          <div class="field"><label>Potência (Trafos) atual <span class="req">*</span></label><input type="number" step="any" data-k="alt_potAtual" oninput="recalcTecnico()"></div>
           <div class="field"><label>Qtde atual <span class="req">*</span></label><input type="number" data-k="alt_qtdAtual"></div>
           <div class="field"></div>
           <div class="field"><label>Potência (Trafos) futura <span class="req">*</span></label><input type="text" id="alt_potFutura" data-k="alt_potFutura" readonly></div>

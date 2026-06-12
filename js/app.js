@@ -250,6 +250,7 @@ function recalcCubiculo(i){
   const elPot=$('#cubTrafoPot'+i), elQtd=$('#cubTrafoQtd'+i);
   if(elPot) elPot.textContent=fmt(rt.potenciaTotal);
   if(elQtd) elQtd.textContent=rt.quantidadeTotal;
+  validarDemandaCubiculo(i);
   recalcTecnico();
 }
 function demandaRepresentativaCubiculo(c){
@@ -258,6 +259,15 @@ function demandaRepresentativaCubiculo(c){
     return Math.max(p,f);
   }
   return parseFloat(c.demanda)||0;
+}
+function validarDemandaCubiculo(i){
+  const c=cubiculos[i]; if(!c) return;
+  const el=$('#cubDemandaAlert'+i); if(!el) return;
+  const potCub=CalculoMT.calcularTrafos(c.trafos).potenciaTotal;
+  const demCub=demandaRepresentativaCubiculo(c);
+  el.innerHTML = (demCub>0 && potCub>0 && demCub>potCub)
+    ? alertHTML('err',`A demanda do cubículo não pode ser superior à potência total dos seus transformadores (${fmt(potCub)} kVA).`)
+    : '';
 }
 function totaisCubiculos(){
   let potenciaTotal=0, quantidadeTotal=0, demandaTotal=0;
@@ -282,9 +292,9 @@ function renderCubiculos(){
     </tr>`).join('');
     const azul=(c.modalidade==='Azul');
     const demandaFields = azul
-      ? `<div class="field"><label>Demanda Ponta (kW)</label><input type="number" step="any" value="${c.demandaPonta}" oninput="cubiculos[${i}].demandaPonta=this.value;recalcTecnico()"></div>
-         <div class="field"><label>Demanda Fora de Ponta (kW)</label><input type="number" step="any" value="${c.demandaForaPonta}" oninput="cubiculos[${i}].demandaForaPonta=this.value;recalcTecnico()"></div>`
-      : `<div class="field"><label>Demanda (kW)</label><input type="number" step="any" value="${c.demanda}" oninput="cubiculos[${i}].demanda=this.value;recalcTecnico()"></div>`;
+      ? `<div class="field"><label>Demanda Ponta (kW)</label><input type="number" step="any" value="${c.demandaPonta}" oninput="cubiculos[${i}].demandaPonta=this.value;recalcTecnico();validarDemandaCubiculo(${i})"></div>
+         <div class="field"><label>Demanda Fora de Ponta (kW)</label><input type="number" step="any" value="${c.demandaForaPonta}" oninput="cubiculos[${i}].demandaForaPonta=this.value;recalcTecnico();validarDemandaCubiculo(${i})"></div>`
+      : `<div class="field"><label>Demanda (kW)</label><input type="number" step="any" value="${c.demanda}" oninput="cubiculos[${i}].demanda=this.value;recalcTecnico();validarDemandaCubiculo(${i})"></div>`;
     return `<div class="conditional" style="margin-top:14px">
       <div class="conditional-tag">Cubículo ${i+1}</div>
       ${state.finalidade!=='Conexão Nova' ? `<div class="field"><label>N° Instalação</label><input type="text" value="${c.instalacao}" placeholder="Nº da instalação" oninput="cubiculos[${i}].instalacao=this.value"></div>` : ''}
@@ -301,8 +311,10 @@ function renderCubiculos(){
           <select onchange="cubiculos[${i}].modalidade=this.value;renderCubiculos()"><option value="">Selecione…</option><option ${c.modalidade==='Verde'?'selected':''}>Verde</option><option ${c.modalidade==='Azul'?'selected':''}>Azul</option></select></div>
         ${demandaFields}
       </div>
+      <div id="cubDemandaAlert${i}"></div>
     </div>`;
   }).join('');
+  cubiculos.forEach((c,i)=>validarDemandaCubiculo(i));
   recalcTecnico();
 }
 
@@ -379,7 +391,8 @@ function preencherTiposSE(){
   const selAtual=$('#alt_tipoAtual');
   if(selAtual){
     const baseAtual=['Subestação Nº 1','Subestação Nº 2','Subestação Nº 4','Subestação Nº 5','Subestação Nº 6','Subestação Nº 8'];
-    const listaAtual=CalculoMT.filtrarTiposPorPotencia(baseAtual,state.potTotalTrafos);
+    const potAtual=parseFloat($('[data-k=alt_potAtual]')?.value)||0;
+    const listaAtual=CalculoMT.filtrarTiposPorPotencia(baseAtual,potAtual);
     const atual=selAtual.value;
     const manter=listaAtual.includes(atual);
     selAtual.innerHTML='<option value="">Selecione…</option>'+listaAtual.map(s=>`<option ${manter&&atual===s?'selected':''}>${s}</option>`).join('');
@@ -472,6 +485,10 @@ function validarDemandas(){
   }
   const rPot=CalculoMT.validarDemandaVsPotencia(dAtual,state.potTotalTrafos);
   if(rPot.nivel)out.push(rPot);
+  if(ehAlteracao&&dFutura){
+    const rPotFut=CalculoMT.validarDemandaVsPotencia(dFutura,state.potTotalTrafos);
+    if(rPotFut.nivel)out.push(rPotFut);
+  }
   if(ehAlteracao&&dAtual&&dFutura){
     const rFut=CalculoMT.validarDemandaFuturaVsAtual(state.finalidade,dAtual,dFutura);
     if(rFut.nivel)out.push(rFut);
