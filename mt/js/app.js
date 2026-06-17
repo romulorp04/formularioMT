@@ -711,9 +711,17 @@ function abrirAnexoII(){$('#modalAnexo').classList.add('show');}
 function fecharAnexoII(){$('#modalAnexo').classList.remove('show');}
 
 /* ===== Init ===== */
+function aplicarAtividadeDaURL(){
+  const v=new URLSearchParams(location.search).get('atividade');
+  if(!v || !ATIVIDADES.includes(v)) return;
+  const sel=$('#f_atividade');
+  sel.value=v;
+  sel.dispatchEvent(new Event('change'));
+}
 document.addEventListener('DOMContentLoaded',()=>{
   fillAtividades(); bindInputs();
   addTrafo(); // começa com 1 linha de trafo
+  aplicarAtividadeDaURL();
   // stepper clicável
   $$('.step').forEach((s,i)=>s.addEventListener('click',()=>goTo(i)));
 });

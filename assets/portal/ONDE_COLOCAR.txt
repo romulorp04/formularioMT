@@ -1,0 +1,25 @@
+PACOTE — Imagens reais do Portal (capa)
+========================================
+Substitua os 12 placeholders cinza pelas imagens reais.
+
+Copie TODOS os 12 arquivos .png para dentro de:
+   c:\Projetos\formularioMT\assets\portal\
+
+Eles vão SOBRESCREVER os placeholders cinza que têm os mesmos nomes.
+Os nomes já estão exatamente como o index.html espera, então nada mais precisa mudar.
+
+Mapeamento (para conferência):
+  img_casa1.png        = Casa até 50m²
+  img_casa2.png        = Casa até 100m²
+  img_casa3.png        = Casa > 100m²
+  img_comercio.png     = Comércio (BT)
+  img_industria_bt.png = Indústria (BT)
+  img_rural.png        = Rural (BT)
+  img_loteamento.png   = Loteamento
+  img_condominio.png   = Condomínio de torres
+  img_coletivo.png     = Atendimento coletivo
+  img_industria_mt.png = Indústria (MT)
+  img_outros_mt.png    = Outros estabelecimentos (MT)
+  img_irrigante.png    = Irrigante (MT)
+
+Depois de copiar, recarregue a capa com Ctrl+Shift+R.

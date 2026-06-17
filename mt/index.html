@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulário Orçamento de Conexão MT — Cemig</title>
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+
+<header class="site"><div class="wrap">
+  <a href="#" class="logo"><img src="assets/logo-cemig.svg" alt="Cemig" height="44"></a>
+  <div style="display:flex;gap:10px">
+    <a href="https://atende.cemig.com.br/Login" target="_blank" rel="noopener" class="header-cta">CEMIG ATENDE</a>
+    <a href="https://partapr.cemig.com.br/PARTAPR/SelecaoModulo.aspx" target="_blank" rel="noopener" class="header-cta">APRWEB</a>
+  </div>
+</div></header>
+
+<section class="service-hero"><div class="wrap">
+<h1 class="hero-title">
+  <span class="hero-title-main font-ssbroad">Formulário</span>
+  <span class="hero-title-sub">Orçamento de Conexão / Alteração de Carga Urbana ou Rural em Média Tensão</span>
+</h1>
+  <p class="sub">Preenchimento digital pelo cliente ou Responsável Técnico para solicitações em Média Tensão (MT).</p>
+</div></section>
+
+<div class="stepper-bar"><div class="stepper" id="stepper">
+  <div class="step active"><span class="num"><span>i</span></span>Orientações</div>
+  <div class="step"><span class="num"><span>1</span></span>Classificação</div>
+  <div class="step"><span class="num"><span>2</span></span>Proprietário</div>
+  <div class="step"><span class="num"><span>3</span></span>Unidade Consumidora</div>
+  <div class="step"><span class="num"><span>4</span></span>Dados Técnicos</div>
+  <div class="step"><span class="num"><span>5</span></span>Prévia &amp; PDF</div>
+</div></div>
+
+<main>
+<!-- ============ PÁGINA 0 — ORIENTAÇÕES ============ -->
+<section class="page show" id="page-0">
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+      <h2>Orientações para preenchimento</h2>
+      <span class="step-tag">Comece por aqui</span>
+    </div>
+    <div class="card-body">
+      <p class="intro-lead">Leia as orientações antes de iniciar. Este formulário deve ser preenchido pelo cliente ou pelo Responsável Técnico contratado, conforme a Resolução Normativa ANEEL (REN) nº 1.000/2021.</p>
+      <ul class="orient-list">
+        <li><span class="bullet">1</span><div>O formulário deve ser preenchido para solicitações de <strong>Conexão Nova</strong> e <strong>Alteração de Demanda</strong> de unidades consumidoras atendidas em Média Tensão (MT). O responsável técnico que atuar em nome de terceiros deverá apresentar procuração (art. 9º da REN nº 1.000/2021).</div></li>
+        <li><span class="bullet">2</span><div>Para pedidos de Conexão Nova é obrigatório anexar documento que comprove que a unidade está em área regular, quando houver ocupação em faixa de domínio ou servidão. <a href="https://www.cemig.com.br/como-solicitar-os-principais-servicos/ligacao-nova-e-aumento-de-carga/prazo-para-a-ligacao-nova-da-energia/" target="_blank" rel="noopener">Consultar relação no portal Cemig</a>.</div></li>
+        <li><span class="bullet">3</span><div>É obrigatório anexar a <strong>planta de situação</strong> da edificação conforme ND-5.3 (exceto alteração de demanda sem mudança de local da subestação). As condições ambientais serão verificadas pela Cemig.</div></li>
+        <li><span class="bullet">4</span><div>Se houver motores monofásicos acima de 15 CV e/ou trifásicos acima de 50 CV, é obrigatório anexar o <a href="https://www.cemig.com.br/wp-content/uploads/2025/10/Formulario_Partida_Motores.xls" target="_blank" rel="noopener">formulário para análise de partida de motores</a>.</div></li>
+        <li><span class="bullet">5</span><div>Atividades de <strong>Irrigação</strong> ou <strong>Aquicultura</strong> exigem o preenchimento da <a href="https://www.cemig.com.br/wp-content/uploads/2025/10/formaliza_solic_desconto_irrigante_aquicultor_versao_D_portal_Cemig.docx" target="_blank" rel="noopener">carta de formalização do pedido</a> e comprovação de licença ambiental e outorga de uso de recursos hídricos.</div></li>
+        <li><span class="bullet">6</span><div>Geração em paralelismo permanente sem injeção (GRID ZERO) ou momentâneo (gerador a diesel) deve ser informada no formulário. <a href="https://www.cemig.com.br/geracao-distribuida/manual-de-geracao-distribuida/" target="_blank" rel="noopener">Consultar manual do GRID-ZERO</a>.</div></li>
+      </ul>
+      <div class="callout"><strong>Pedido de vistoria e ligação:</strong> se a subestação estiver pronta para ligar, a vistoria é disparada automaticamente após o orçamento. Caso contrário, você terá até 120 dias para solicitar. O orçamento pode ser cancelado após duas reprovações pelo mesmo motivo, com cobrança de taxa a partir do segundo serviço.</div>
+      <div class="legend"><span><b>*</b> Campo de preenchimento obrigatório</span><span><b>**</b> Obrigatório para pessoa física (informe 0 se não houver demanda contratada)</span></div>
+      <div class="form-nav"><span></span><button class="btn btn-primary" onclick="goTo(1)">Iniciar preenchimento<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PÁGINA 1 — CLASSIFICAÇÃO ============ -->
+<section class="page" id="page-1">
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+      <h2>1. Classificação do Atendimento</h2><span class="step-tag">Etapa 1 de 5</span>
+    </div>
+    <div class="card-body">
+      <div class="grid cols-2">
+        <div class="field"><label>Opção de Atendimento <span class="req">*</span></label>
+          <select id="f_opcaoAtend" data-k="opcaoAtend"><option value="">Selecione…</option><option>Mercado Cativo</option><option>Mercado Livre</option></select></div>
+        <div class="field"><label>Finalidade <span class="req">*</span></label>
+          <select id="f_finalidade" data-k="finalidade" onchange="onFinalidade()"><option value="">Selecione…</option>
+            <option>Conexão Nova</option><option>Aumento de Demanda</option><option>Redução de Demanda</option>
+            <option>Adequação de Subestação</option><option>Aderir a Tarifa Monômia</option><option>Religação de Subestação</option>
+            <option>Desconexão para encerramento contratual</option><option>Alteração da tensão de fornecimento BT→MT</option>
+            <option>Migração Mercado livre sem Aumento de Carga</option><option>Migração Mercado livre com Aumento de Carga</option>
+            <option>Migração Mercado livre com Redução de Carga</option></select></div>
+      </div>
+      <div class="conditional" id="instalBox" style="display:none">
+        <div class="conditional-tag"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Campo dependente da finalidade</div>
+        <div class="field"><label id="instalLabel">Informe o número da instalação <span class="req">*</span></label><input type="text" data-k="numInstalacao" placeholder="Nº da instalação"></div>
+      </div>
+      <div class="grid cols-2" style="margin-top:16px">
+        <div class="field"><label>Telefone do RT — Celular</label><input type="tel" data-k="rtCelular" placeholder="(31) 90000-0000" onblur="onTel('rtCelular')"><span id="status-rtCelular" class="cep-status"></span></div>
+        <div class="field"><label>Telefone do RT — Fixo</label><input type="tel" data-k="rtFixo" placeholder="(31) 0000-0000" onblur="onTel('rtFixo')"><span id="status-rtFixo" class="cep-status"></span></div>
+      </div>
+      <div class="form-nav"><button class="btn btn-ghost" onclick="goTo(0)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Voltar</button>
+        <span class="progress-mini">Etapa 1 de 5</span>
+        <button class="btn btn-primary" onclick="goTo(2)">Avançar<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PÁGINA 2 — PROPRIETÁRIO + CORRESPONDÊNCIA ============ -->
+<section class="page" id="page-2">
+  <div class="card">
+    <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+      <h2>2. Dados do Proprietário</h2><span class="step-tag">Etapa 2 de 5</span></div>
+    <div class="card-body">
+      <div class="grid cols-2">
+        <div class="field"><label>CPF / CNPJ <span class="req">*</span></label><input type="text" id="f_cpfcnpj" data-k="cpfCnpj" placeholder="000.000.000-00" oninput="onCpfCnpj()"><span class="field-note" id="cpfMsg"></span></div>
+        <div class="field span-2"><label>Nome Completo ou Razão Social <span class="req">*</span></label><input type="text" data-k="nome" placeholder="Nome completo ou razão social"></div>
+        <div class="field"><label>Telefone do cliente <span class="req">*</span></label><input type="tel" data-k="telCliente" placeholder="(31) 90000-0000" onblur="onTel('telCliente')"><span id="status-telCliente" class="cep-status"></span></div>
+        <div class="field"><label>E-mail do cliente</label><input type="email" data-k="emailCliente" placeholder="email@exemplo.com" onblur="onEmail('emailCliente')"><span id="status-emailCliente" class="cep-status"></span></div>
+        <div class="field"><label>Telefone do solicitante</label><input type="tel" data-k="telSolicitante" placeholder="(31) 90000-0000" onblur="onTel('telSolicitante')"><span id="status-telSolicitante" class="cep-status"></span></div>
+        <div class="field"><label>E-mail do solicitante</label><input type="email" data-k="emailSolicitante" placeholder="email@exemplo.com" onblur="onEmail('emailSolicitante')"><span id="status-emailSolicitante" class="cep-status"></span></div>
+      </div>
+
+      <div class="subhead">3. E-mail ou Endereço para Correspondência / Entrega da Conta</div>
+      <div class="grid cols-3">
+        <div class="field"><label>Deseja escolher data de vencimento? <span class="req">*</span></label>
+          <select data-k="desejaVenc" onchange="onVenc()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+        <div class="field" id="vencDiaBox" style="display:none"><label>Dia do vencimento</label>
+          <select data-k="diaVenc"><option value="">—</option><option>1</option><option>6</option><option>11</option><option>17</option><option>22</option><option>27</option></select></div>
+        <div class="field"><label>Modalidade da obra <span class="opt">(se houver)</span></label>
+          <select data-k="modalidadeObra"><option value="">—</option><option>PART</option><option>CEMIG</option></select></div>
+      </div>
+      <div class="grid cols-2" style="margin-top:16px">
+        <div class="field"><label>Como deseja receber a correspondência?</label>
+          <select data-k="formaCorresp" onchange="onCorresp()"><option value="">Selecione…</option><option>E-mail</option><option>Endereço</option><option>Agência Correios(Caixa Postal)</option></select></div>
+        <div class="field" id="correspEmailBox" style="display:none"><label>Informar e-mail</label><input type="email" data-k="emailCorresp" placeholder="email@exemplo.com" onblur="onEmail('emailCorresp')"><span id="status-emailCorresp" class="cep-status"></span></div>
+      </div>
+
+      <div id="endCorrespBox" style="display:none">
+        <div class="conditional" style="margin-top:16px">
+          <div class="conditional-tag">Endereço para recebimento do orçamento de conexão</div>
+          <div class="grid cols-4">
+            <div class="field span-3"><label>Rua / Av.</label><input type="text" data-k="ec_rua"></div>
+            <div class="field"><label>Nº</label><input type="text" data-k="ec_num"></div>
+            <div class="field span-2"><label>Complemento</label><input type="text" data-k="ec_compl"></div>
+            <div class="field"><label>Bairro / Distrito</label><input type="text" data-k="ec_bairro"></div>
+            <div class="field"><label>CEP</label><input type="text" data-k="ec_cep" placeholder="00000-000" onblur="onCEP('ec')"><span id="cep-status-ec" class="cep-status"></span></div>
+            <div class="field span-2"><label>Município</label><input type="text" data-k="ec_municipio"></div>
+            <div class="field"><label>Estado</label><input type="text" data-k="ec_estado" value="MG"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field span-full" style="margin-top:16px"><label>Conta globalizada <span class="opt">(poder público — código de débito automático globalizado da fatura)</span></label>
+        <input type="text" data-k="contaGlobalizada" placeholder="Nº da conta globalizada (se aplicável)"></div>
+
+      <div class="form-nav"><button class="btn btn-ghost" onclick="goTo(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Voltar</button>
+        <span class="progress-mini">Etapa 2 de 5</span>
+        <button class="btn btn-primary" onclick="goTo(3)">Avançar<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+    </div>
+  </div>
+</section>
+<!-- ============ PÁGINA 3 — UNIDADE CONSUMIDORA ============ -->
+<section class="page" id="page-3">
+  <div class="card">
+    <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <h2>4. Dados da Unidade Consumidora</h2><span class="step-tag">Etapa 3 de 5</span></div>
+    <div class="card-body">
+      <p class="field-note" style="margin-bottom:14px">Endereço do ponto de entrega.</p>
+      <div class="grid cols-2">
+        <div class="field"><label>Atividade desenvolvida na unidade <span class="req">*</span></label>
+          <select id="f_atividade" data-k="atividade" onchange="onAtividade()"><option value="">Selecione…</option></select></div>
+        <div class="field"><label>Ramo da Atividade <span class="req">*</span></label><input type="text" data-k="ramoAtividade" placeholder="Ramo da atividade"></div>
+      </div>
+      <div id="irrigacaoAlert"></div>
+
+      <div class="grid cols-4" style="margin-top:16px">
+        <div class="field"><label>Localização <span class="req">*</span></label>
+          <select id="f_localizacao" data-k="localizacao" onchange="onLocalizacao()"><option value="">Selecione…</option><option>Urbana</option><option>Rural</option></select></div>
+        <div class="field"><label>CEP <span class="req">*</span></label><input type="text" data-k="uc_cep" placeholder="00000-000" onblur="onCEP('uc')"><span id="cep-status-uc" class="cep-status"></span></div>
+        <div class="field"><label>Município <span class="req">*</span></label><input type="text" data-k="uc_municipio"></div>
+        <div class="field"><label>Estado <span class="req">*</span></label><input type="text" data-k="uc_estado" value="MG"></div>
+      </div>
+
+      <div class="subhead">Coordenadas do local de atendimento</div>
+      <p class="field-note" id="coordHint" style="margin-bottom:12px">Informe as coordenadas do local de atendimento.</p>
+      <div class="field" id="mudancaLocalBox" style="display:none;margin-bottom:12px">
+        <label>Haverá mudança do local da subestação? <span class="req">*</span></label>
+        <select id="f_mudancaLocal" data-k="mudancaLocal" onchange="onMudancaLocal()">
+          <option value="">Selecione…</option><option>Sim</option><option>Não</option>
+        </select>
+      </div>
+      <div class="grid cols-4">
+        <div class="field"><label>Fuso</label><select data-k="fuso"><option value="">—</option><option>22°</option><option>23°</option><option>24°</option></select></div>
+        <div class="field"><label id="latLabel">Latitude <span class="req">*</span></label><input type="number" step="any" data-k="latitude" placeholder="-19.92" oninput="onCoord()"></div>
+        <div class="field"><label id="lonLabel">Longitude <span class="req">*</span></label><input type="number" step="any" data-k="longitude" placeholder="-43.94" oninput="onCoord()"></div>
+        <div class="field"><label>Coordenada em UTM</label><input type="text" data-k="utm" placeholder="(calculado)" readonly></div>
+      </div>
+      <!-- coordenadas novas (quando há mudança de local) -->
+      <div class="grid cols-4" id="coordNovaBox" style="display:none;margin-top:12px">
+        <div class="field"></div>
+        <div class="field"><label>Latitude nova <span class="req">*</span></label><input type="number" step="any" data-k="latitudeNova" placeholder="-19.92" oninput="onCoord()"></div>
+        <div class="field"><label>Longitude nova <span class="req">*</span></label><input type="number" step="any" data-k="longitudeNova" placeholder="-43.94" oninput="onCoord()"></div>
+        <div class="field"><label>UTM (novo)</label><input type="text" data-k="utmNova" readonly placeholder="(calculado)"></div>
+      </div>
+      <div id="coordAlert"></div>
+
+      <!-- Bloco URBANO -->
+      <div id="blocoUrbano" style="display:none">
+        <div class="subhead">Endereço (Urbano)</div>
+        <div class="grid cols-4">
+          <div class="field span-3"><label>Endereço <span class="req">*</span></label><input type="text" data-k="urb_endereco"></div>
+          <div class="field"><label>Nº <span class="req">*</span></label><input type="text" data-k="urb_num"></div>
+          <div class="field span-2"><label>Bairro <span class="req">*</span></label><input type="text" data-k="urb_bairro"></div>
+          <div class="field span-2"><label>Complemento</label><input type="text" data-k="urb_compl"></div>
+        </div>
+      </div>
+      <!-- Bloco RURAL -->
+      <div id="blocoRural" style="display:none">
+        <div class="subhead">Endereço (Rural)</div>
+        <div class="grid cols-2">
+          <div class="field"><label>Distrito / Comunidade / Região <span class="req">*</span></label><input type="text" data-k="rur_distrito"></div>
+          <div class="field"><label>Nome da Propriedade <span class="req">*</span></label><input type="text" data-k="rur_propriedade"></div>
+        </div>
+      </div>
+      <div class="grid cols-2" style="margin-top:16px">
+        <div class="field"><label>Ponto de Referência</label><input type="text" data-k="pontoReferencia"></div>
+        <div class="field"><label>Nº Instalação do Vizinho</label><input type="text" data-k="instalVizinho"></div>
+      </div>
+
+      <div class="subhead">Questões ambientais</div>
+      <div class="grid cols-2">
+        <div class="field"><label>A UC está inserida em Área de Preservação Permanente (APP) e/ou Unidade de Conservação?</label>
+          <select data-k="app" onchange="onAmbiental()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+        <div class="field"><label>A UC está inserida em Reserva Legal?</label>
+          <select data-k="reservaLegal" onchange="onAmbiental()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+      </div>
+      <div id="ambientalAlert"></div>
+
+      <div class="grid cols-2" style="margin-top:16px">
+        <div class="field span-full"><label>A subestação está pronta para ser ligada? <span class="req">*</span></label>
+          <select data-k="subPronta" onchange="onSubPronta()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+      </div>
+      <div id="subProntaAlert"></div>
+
+      <div class="form-nav"><button class="btn btn-ghost" onclick="goTo(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Voltar</button>
+        <span class="progress-mini">Etapa 3 de 5</span>
+        <button class="btn btn-primary" onclick="goTo(4)">Avançar<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+    </div>
+  </div>
+</section>
+<!-- ============ PÁGINA 4 — DADOS TÉCNICOS ============ -->
+<section class="page" id="page-4">
+  <div class="card">
+    <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+      <h2>5. Dados Técnicos</h2><span class="step-tag">Etapa 4 de 5</span></div>
+    <div class="card-body">
+      <div class="grid cols-3">
+        <div class="field"><label>Nível de tensão da rede MT <span class="req">*</span></label>
+          <select id="f_tensaoMT" data-k="tensaoMT" onchange="recalcTecnico()"><option value="">Selecione…</option><option value="13.8">13,8 kV</option><option value="22">22 kV</option><option value="34.5">34,5 kV</option></select></div>
+        <div class="field"><label>Subestação compartilhada (multimedição)?</label>
+          <select id="f_compartilhada" data-k="compartilhada" onchange="onCompartilhada()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+        <div class="field" id="qtdCubiculosBox" style="display:none"><label>Quantos cubículos?</label><input type="number" min="1" data-k="qtdCubiculos" placeholder="Ex.: 2" oninput="sincronizarCubiculos()"></div>
+      </div>
+      <div id="compartilhadaAlert"></div>
+
+      <div id="cubiculosBox" style="display:none">
+        <div class="subhead">Cubículos da Subestação Compartilhada</div>
+        <div id="cubiculosCards"></div>
+      </div>
+
+      <div id="blocoTecnicoIndividual">
+      <div id="blocoTotaisConsolidados" style="display:none">
+        <div class="subhead">Totais Consolidados (Cubículos)</div>
+        <div class="grid cols-2">
+          <div class="field"><label>Soma dos transformadores (kVA)</label><input type="text" id="totConsolidadoTrafos" readonly></div>
+          <div class="field"><label>Soma das demandas (kW)</label><input type="text" id="totConsolidadoDemanda" readonly></div>
+        </div>
+      </div>
+      <div id="blocoTrafosIndividual">
+      <!-- TRANSFORMADORES -->
+      <div class="subhead">Transformador(es) <span class="req">*</span></div>
+      <div class="tbl-scroll">
+        <table class="tbl" id="trafoTbl">
+          <thead><tr><th style="width:70px">Trafo</th><th>Potência (kVA)</th><th>Qtde</th><th>Relação I mag / I nominal</th><th style="width:46px"></th></tr></thead>
+          <tbody id="trafoBody"></tbody>
+          <tfoot><tr><td>Σ</td><td class="calc" id="trafoPotTotal">0</td><td class="calc" id="trafoQtdTotal">0</td><td colspan="2"></td></tr></tfoot>
+        </table>
+      </div>
+      <button class="btn-add" onclick="addTrafo()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar transformador</button>
+      </div>
+
+      <div id="blocoMotoresIndividual">
+      <!-- MOTORES / CARGAS ESPECIAIS -->
+      <div class="subhead">Motores / Cargas Especiais <span class="opt">(preencha se houver)</span></div>
+      <div class="tbl-scroll">
+        <table class="tbl" id="motorTbl">
+          <thead><tr>
+            <th>Tipo</th><th>Pot (CV)</th><th>FP</th><th>Rend (η)</th><th>Tensão (V)</th><th>Ip/In</th>
+            <th class="calc">Pot (kVA)</th><th class="calc">Pot (kW)</th><th class="calc">I nom (A)</th><th class="calc">I part (A)</th><th>Tempo Ip (s)</th><th class="calc">Ip prim (A)</th><th>Disp. partida</th><th style="width:46px"></th>
+          </tr></thead>
+          <tbody id="motorBody"></tbody>
+        </table>
+      </div>
+      <button class="btn-add" onclick="addMotor()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar motor</button>
+      </div>
+
+      <!-- Carga operante na partida — OCULTO temporariamente (a pedido) -->
+      <div id="blocoCargaOperante" style="display:none">
+        <div class="subhead">Carga operante na partida do maior motor <span class="opt">(se houver motores)</span></div>
+        <div class="grid cols-3">
+          <div class="field"><label>Carga operante na partida (kVA)</label><input type="number" step="any" data-k="cargaOperante"></div>
+          <div class="field"><label>Corrente de partida (Ip) prevista (A)</label><input type="number" step="any" data-k="ipPrevista"></div>
+          <div class="field"><label>Tempo (t) da corrente de partida (s)</label><input type="number" step="any" data-k="tempoPartida"></div>
+        </div>
+      </div>
+
+      <!-- Conexão Nova vs Alteração -->
+      <div id="blocoConexaoNova" style="display:none">
+        <div class="subhead">Para Conexão Nova</div>
+        <div class="grid cols-3">
+          <div class="field"><label>Potência (Transformadores) <span class="req">*</span></label><input type="text" id="cn_pot" data-k="cn_pot" readonly></div>
+          <div class="field"><label>Quantidade (Transformadores) <span class="req">*</span></label><input type="text" id="cn_qtd" data-k="cn_qtd" readonly></div>
+          <div class="field"><label>Tipo de Subestação <span class="req">*</span></label><select id="cn_tipoSE" data-k="cn_tipoSE" onchange="recalcRamal()"><option value="">Selecione…</option></select></div>
+          <div class="field span-full"><div class="se-gallery" id="seGallery_nova"></div></div>
+        </div>
+      </div>
+      <div id="blocoAlteracao" style="display:none">
+        <div class="subhead">Para Alteração de Demanda</div>
+        <div class="grid cols-3">
+          <div class="field"><label>Potência (Trafos) atual <span class="req">*</span></label><input type="number" step="any" data-k="alt_potAtual" oninput="recalcTecnico()"></div>
+          <div class="field"><label>Qtde atual <span class="req">*</span></label><input type="number" data-k="alt_qtdAtual"></div>
+          <div class="field"></div>
+          <div class="field"><label>Potência (Trafos) futura <span class="req">*</span></label><input type="text" id="alt_potFutura" data-k="alt_potFutura" readonly></div>
+          <div class="field"><label>Qtde futura <span class="req">*</span></label><input type="text" id="alt_qtdFutura" data-k="alt_qtdFutura" readonly></div>
+          <div class="field"></div>
+          <div class="field"><label>Haverá troca do tipo de subestação? <span class="req">*</span></label>
+            <select id="alt_troca" data-k="alt_troca" onchange="onTrocaSE()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+          <div class="field" id="alt_tipoAtualBox"><label id="alt_tipoAtualLbl">Tipo de Subestação atual <span class="req">*</span></label>
+            <select id="alt_tipoAtual" data-k="alt_tipoAtual" onchange="recalcRamal()"><option value="">Selecione…</option></select></div>
+          <div class="field span-full"><div class="se-gallery" id="seGallery_atual"></div></div>
+          <div class="field" id="alt_tipoParaBox" style="display:none"><label>Tipo de Subestação (Para) <span class="req">*</span></label>
+            <select id="alt_tipoPara" data-k="alt_tipoPara" onchange="recalcRamal()"><option value="">Selecione…</option></select></div>
+          <div class="field span-full" id="seGalleryBox_para" style="display:none"><div class="se-gallery" id="seGallery_para"></div></div>
+        </div>
+      </div>
+
+      <div id="blocoTarifacaoDemanda">
+      <!-- Tarifa monômia -->
+      <div class="subhead">Tarifação e Demanda</div>
+      <div class="grid cols-3">
+        <div class="field"><label>Faturada por tarifa monômia? <span class="req">*</span></label>
+          <select id="f_monomia" data-k="monomia" onchange="recalcTecnico()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+        <div class="field"><label>Modalidade tarifária horária <span class="req">*</span></label>
+          <select id="f_modalidade" data-k="modalidade" onchange="onModalidade()"><option value="">Selecione…</option><option>Verde</option><option>Azul</option></select></div>
+        <div class="field"><label>Haverá demanda escalonada? <span class="req">*</span></label>
+          <select id="f_escalonada" data-k="escalonada" onchange="onEscalonada()"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+      </div>
+      <div id="monomiaAlert"></div>
+
+      <div class="grid cols-2" id="demandaBox" style="margin-top:16px">
+        <div class="field" id="box_dem_atual"            style="display:none"><label id="lbl_dem_atual"></label><input type="number" step="any" data-k="dem_atual" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_futura"           style="display:none"><label id="lbl_dem_futura"></label><input type="number" step="any" data-k="dem_futura" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_ponta_atual"      style="display:none"><label id="lbl_dem_ponta_atual"></label><input type="number" step="any" data-k="dem_ponta_atual" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_ponta_futura"     style="display:none"><label id="lbl_dem_ponta_futura"></label><input type="number" step="any" data-k="dem_ponta_futura" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_foraponta_atual"  style="display:none"><label id="lbl_dem_foraponta_atual"></label><input type="number" step="any" data-k="dem_foraponta_atual" oninput="recalcTecnico()"></div>
+        <div class="field" id="box_dem_foraponta_futura" style="display:none"><label id="lbl_dem_foraponta_futura"></label><input type="number" step="any" data-k="dem_foraponta_futura" oninput="recalcTecnico()"></div>
+      </div>
+      <div id="demandaAlert"></div>
+
+      <div id="escalonadaBox" style="display:none">
+        <div class="subhead">Demanda Escalonada</div>
+        <div class="tbl-scroll">
+          <table class="tbl" id="escalonadaTbl">
+            <thead id="escalonadaHead"></thead>
+            <tbody id="escalonadaBody"></tbody>
+          </table>
+        </div>
+        <button class="btn-add" onclick="addEscalonada()"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Adicionar etapa de demanda</button>
+      </div>
+      </div>
+
+      <!-- Geração -->
+      <div class="subhead">Geração e Baixa Tensão</div>
+      <div class="grid cols-2">
+        <div class="field"><label>Possui geração em paralelismo momentâneo (gerador a diesel)? <span class="req">*</span></label>
+          <select data-k="gerMomentaneo" onchange="onGeracao('mom')"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+        <div class="field" id="gerMomPotBox" style="display:none"><label>Informar potência da geração (kVA)</label><input type="number" step="any" data-k="gerMomentaneoPot"></div>
+        <div class="field"><label>Possui geração em paralelismo permanente sem injeção (GRID ZERO)? <span class="req">*</span></label>
+          <select data-k="gridZero" onchange="onGeracao('grid')"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+        <div class="field" id="gridZeroPotBox" style="display:none"><label>Informar potência da geração (kVA)</label><input type="number" step="any" data-k="gridZeroPot"></div>
+        <div class="field"><label>Possui unidades consumidoras de Baixa Tensão (BT) na mesma propriedade? <span class="req">*</span></label>
+          <select data-k="btMesmaProp"><option value="">Selecione…</option><option>Sim</option><option>Não</option></select></div>
+      </div>
+      </div>
+
+      <!-- RAMAL DE ENTRADA (galeria visual) -->
+      <div class="subhead">Ramal de Entrada <span class="req">*</span></div>
+      <p class="field-note" style="margin-bottom:12px">Selecione a figura que representa o ramal de entrada que atende ou atenderá a unidade consumidora, conforme o tipo de subestação e a ND-5.3.</p>
+      <div id="ramalGallery" class="ramal-gallery"></div>
+      <div id="ramalEmpty" class="ramal-empty">Preencha o nível de tensão, a localização, o tipo de subestação e a finalidade para visualizar os ramais elegíveis.</div>
+
+      <div class="field span-full" style="margin-top:18px"><label>Observações</label><textarea data-k="observacoes" placeholder="Observações adicionais (opcional)"></textarea></div>
+
+      <div class="form-nav"><button class="btn btn-ghost" onclick="goTo(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Voltar</button>
+        <span class="progress-mini">Etapa 4 de 5</span>
+        <button class="btn btn-primary" onclick="goTo(5)">Ver prévia<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PÁGINA 5 — PRÉVIA & PDF ============ -->
+<section class="page" id="page-5">
+  <div class="card">
+    <div class="card-head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+      <h2>6. Prévia do Formulário</h2><span class="step-tag">Etapa 5 de 5</span></div>
+    <div class="card-body">
+      <div class="alert info no-print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Confira os dados abaixo. Se algo estiver incorreto, volte às etapas anteriores. Quando estiver tudo certo, exporte o PDF.</div></div>
+      <div id="previewContent" class="preview-doc"></div>
+      <div class="form-nav"><button class="btn btn-ghost" onclick="goTo(4)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Voltar e editar</button>
+        <span class="progress-mini">Pronto para exportar</span>
+        <button class="btn btn-primary" onclick="exportarPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exportar PDF</button></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<button class="fab" onclick="abrirAnexoII()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+  Conversão de Potências
+</button>
+
+<div class="modal-overlay" id="modalAnexo">
+  <div class="modal">
+    <div class="modal-head"><h3>Anexo II — Conversão de Potências</h3><button class="close" onclick="fecharAnexoII()">×</button></div>
+    <div class="modal-body" id="anexoBody"><p class="field-note" style="margin-bottom:14px">Tabela de referência para conversão de potências de motores em kW absorvido da rede (ND-5.2). Consulta apenas.</p><div class="tbl-scroll"><table class="tbl"><tbody><tr><td colspan="6" style="background:var(--cemig-green-soft);font-weight:800;color:var(--cemig-green-700)">A)   MOTORES MONOFÁSICOS</td></tr><tr><td colspan="6" style="background:var(--cemig-green-soft);font-weight:800;color:var(--cemig-green-700)">TABELA 15-Demanda Individual - Motores Monofásicos(ND-5.2)</td></tr><tr><td>Potência</td><td></td><td>1 Motor</td><td>2 - Motores</td><td>3 a 5 Motores</td><td>Mais de 5 Motores</td></tr><tr><td>Eixo CV</td><td>Absorvida Rede (KW)</td><td></td><td></td><td></td><td></td></tr><tr><td>1/4'</td><td>0,39</td><td>0,62</td><td>0,5</td><td>0,43</td><td>0,37</td></tr><tr><td>1/3'</td><td>0,52</td><td>0,73</td><td>0,58</td><td>0,51</td><td>0,44</td></tr><tr><td>1/2'</td><td>0,66</td><td>0,92</td><td>0,74</td><td>0,64</td><td>0,55</td></tr><tr><td>3/4'</td><td>0,89</td><td>1,24</td><td>0,99</td><td>0,87</td><td>0,74</td></tr><tr><td>1'</td><td>1,1</td><td>1,49</td><td>1,19</td><td>1,04</td><td>0,89</td></tr><tr><td>1,5'</td><td>1,58</td><td>1,93</td><td>1,54</td><td>1,35</td><td>1,16</td></tr><tr><td>2'</td><td>2,07</td><td>2,44</td><td>1,95</td><td>1,71</td><td>1,46</td></tr><tr><td>3'</td><td>3,07</td><td>3,2</td><td>2,56</td><td>2,24</td><td>1,92</td></tr><tr><td>4'</td><td>3,98</td><td>4,15</td><td>3,32</td><td>2,91</td><td>2,49</td></tr><tr><td>5'</td><td>4,91</td><td>5,22</td><td>4,18</td><td>3,65</td><td>3,13</td></tr><tr><td>7,5'</td><td>7,46</td><td>7,94</td><td>6,35</td><td>5,56</td><td>4,76</td></tr><tr><td>10'</td><td>9,44</td><td>10,04</td><td>8,03</td><td>7,03</td><td>6,02</td></tr><tr><td>12,5'</td><td>12,1</td><td>13,01</td><td>10,41</td><td>9,11</td><td>7,81</td></tr><tr><td colspan="6" style="background:var(--cemig-green-soft);font-weight:800;color:var(--cemig-green-700)">B)    MOTORES TRIFÁSICOS</td></tr><tr><td colspan="6" style="background:var(--cemig-green-soft);font-weight:800;color:var(--cemig-green-700)">TABELA 16-Motores Trifásicos (ND-5.2)</td></tr><tr><td>Potência</td><td></td><td>Demanda Individual Absorvida da Rede KVA</td><td></td><td></td><td></td></tr><tr><td>Eixo CV</td><td>Absorvida rede KW</td><td>1 Motor</td><td>2 Motores</td><td>3 a 5 Motores</td><td>Mais de 5 Motores</td></tr><tr><td>1/6'</td><td>0,25</td><td>0,37</td><td>0,3</td><td>0,26</td><td>0,22</td></tr><tr><td>1/4'</td><td>0,33</td><td>0,48</td><td>0,38</td><td>0,34</td><td>0,29</td></tr><tr><td>1/3'</td><td>0,41</td><td>0,56</td><td>0,45</td><td>0,39</td><td>0,34</td></tr><tr><td>1/2'</td><td>0,57</td><td>0,72</td><td>0,58</td><td>0,5</td><td>0,43</td></tr><tr><td>3/4'</td><td>0,82</td><td>1,08</td><td>0,86</td><td>0,76</td><td>0,65</td></tr><tr><td>1'</td><td>1,13</td><td>1,38</td><td>1,1</td><td>0,97</td><td>0,83</td></tr><tr><td>1,5'</td><td>1,58</td><td>2,03</td><td>1,62</td><td>1,42</td><td>1,22</td></tr><tr><td>2'</td><td>1,94</td><td>2,4</td><td>1,92</td><td>1,68</td><td>1,44</td></tr><tr><td>3'</td><td>2,91</td><td>3,64</td><td>2,91</td><td>2,55</td><td>2,18</td></tr><tr><td>4'</td><td>3,82</td><td>4,96</td><td>3,97</td><td>3,47</td><td>2,98</td></tr><tr><td>5'</td><td>4,78</td><td>5,62</td><td>4,5</td><td>3,93</td><td>3,37</td></tr><tr><td>6'</td><td>5,45</td><td>6,49</td><td>5,19</td><td>4,54</td><td>3,89</td></tr><tr><td>7,5'</td><td>6,9</td><td>8,12</td><td>6,5</td><td>5,68</td><td>4,87</td></tr><tr><td>10'</td><td>9,68</td><td>10,76</td><td>8,61</td><td>7,53</td><td>6,46</td></tr><tr><td>12,5'</td><td>11,79</td><td>13,25</td><td>10,6</td><td>9,28</td><td>7,95</td></tr><tr><td>15'</td><td>13,63</td><td>14,98</td><td>11,98</td><td>10,49</td><td>8,99</td></tr><tr><td>20'</td><td>18,4</td><td>20,67</td><td>16,54</td><td>14,47</td><td>12,4</td></tr><tr><td>25'</td><td>22,44</td><td>24,66</td><td>19,73</td><td>17,26</td><td>14,8</td></tr><tr><td>30'</td><td>26,93</td><td>29,59</td><td>23,67</td><td>20,71</td><td>17,76</td></tr><tr><td>50'</td><td>44,34</td><td>49,27</td><td>23,67</td><td>20,71</td><td>17,76</td></tr><tr><td>60'</td><td>51,35</td><td>57,7</td><td>23,67</td><td>20,71</td><td>17,76</td></tr><tr><td>75'</td><td>62,73</td><td>70,48</td><td>23,67</td><td>20,71</td><td>17,76</td></tr><tr><td colspan="6" style="background:var(--cemig-green-soft);font-weight:800;color:var(--cemig-green-700)">C)   AR CONDICIONADO</td></tr><tr><td colspan="6" style="background:var(--cemig-green-soft);font-weight:800;color:var(--cemig-green-700)">Tabela 27 - Potências Nominais De Condicionadores De Ar Tipo Janela (ND-5.2)</td></tr><tr><td colspan="6" style="background:var(--cemig-green-soft);font-weight:800;color:var(--cemig-green-700)">CAPACIDADE POTÊNCIA NOMINAL</td></tr><tr><td>BTU/h</td><td>Kcal/h</td><td>kW</td><td>kVA</td><td></td><td></td></tr><tr><td>8500</td><td>2125</td><td>1,3</td><td>1,55</td><td></td><td></td></tr><tr><td>10000</td><td>2500</td><td>1,4</td><td>1,65</td><td></td><td></td></tr><tr><td>12000</td><td>3000</td><td>1,6</td><td>1,9</td><td></td><td></td></tr><tr><td>14000</td><td>3500</td><td>1,9</td><td>2,1</td><td></td><td></td></tr><tr><td>18000</td><td>4500</td><td>2,6</td><td>2,86</td><td></td><td></td></tr><tr><td>21000</td><td>5250</td><td>2,8</td><td>3,08</td><td></td><td></td></tr><tr><td>30000</td><td>7500</td><td>3,6</td><td>4</td><td></td><td></td></tr></tbody></table></div></div>
+  </div>
+</div>
+
+<script src="js/calculo.js"></script>
+<script src="js/dados.js"></script>
+<script src="js/subestacoes-b64.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
