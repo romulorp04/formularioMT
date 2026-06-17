@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitação Inicial de Fornecimento para Loteamentos e Chacreamentos — Cemig</title>
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<header class="site"><div class="wrap">
+  <a href="#" class="logo"><img src="assets/logo-cemig.svg" alt="Cemig" height="44"></a>
+  <div style="display:flex;gap:10px">
+    <a href="https://atende.cemig.com.br/Login" target="_blank" rel="noopener" class="header-cta">CEMIG ATENDE</a>
+    <a href="https://partapr.cemig.com.br/PARTAPR/SelecaoModulo.aspx" target="_blank" rel="noopener" class="header-cta">APRWEB</a>
+  </div>
+</div></header>
+
+<section class="service-hero"><div class="wrap">
+<h1 class="hero-title">
+  <span class="hero-title-main font-ssbroad">Formulário</span>
+  <span class="hero-title-sub">Solicitação Inicial de Fornecimento para Loteamentos e Chacreamentos</span>
+</h1>
+  <p class="sub">Preenchimento digital pelo empreendedor ou Poder Público para solicitação inicial de fornecimento em loteamentos e condomínios fechados horizontais.</p>
+</div></section>
+
+<main>
+
+<!-- ============ DADOS DO EMPREENDIMENTO ============ -->
+<section class="page show">
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
+      <h2>1. Dados do Empreendimento</h2>
+    </div>
+    <div class="card-body">
+      <p class="intro-lead">Preencha os dados gerais do empreendimento. Este formulário é destinado à solicitação inicial de fornecimento de energia para loteamentos e condomínios fechados horizontais, conforme a Resolução Normativa ANEEL (REN) nº 1.000/2021.</p>
+      <div class="grid cols-2">
+        <div class="field span-2"><label>Cliente / Empreendimento <span class="req">*</span></label>
+          <input data-k="cliente" placeholder="Nome do cliente ou razão social do empreendimento"></div>
+        <div class="field"><label>Município / UF <span class="req">*</span></label>
+          <input data-k="municipioUf" placeholder="Ex.: Belo Horizonte / MG"></div>
+        <div class="field"><label>Tipo de solicitante <span class="req">*</span></label>
+          <select data-k="tipoSolicitante"><option value="">Selecione…</option><option>Empreendedor</option><option>Poder Público (Prefeitura)</option></select></div>
+        <div class="field"><label>Tipo <span class="req">*</span></label>
+          <select data-k="tipo"><option value="">Selecione…</option><option>Loteamento</option><option>Condomínio fechado horizontal</option></select></div>
+        <div class="field"><label>Mês/ano de entrada de carga ou inauguração</label>
+          <input type="month" data-k="mesAno"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ LOCALIZAÇÃO ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+      <h2>2. Localização do Empreendimento</h2>
+    </div>
+    <div class="card-body">
+      <div class="grid cols-2">
+        <div class="field"><label>Latitude <span class="req">*</span></label>
+          <input data-k="latitude" placeholder="Ex.: -19.916667" oninput="onCoord()"></div>
+        <div class="field"><label>Longitude <span class="req">*</span></label>
+          <input data-k="longitude" placeholder="Ex.: -43.934722" oninput="onCoord()"></div>
+        <div class="field span-2"><label>Coordenada UTM (calculada)</label>
+          <input data-k="utm" readonly></div>
+        <div class="field"><label>Local <span class="req">*</span></label>
+          <select data-k="local"><option value="">Selecione…</option><option>Urbano</option><option>Rural</option></select></div>
+      </div>
+      <div id="coordAlert"></div>
+    </div>
+  </div>
+
+  <!-- ============ CONTATO ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+      <h2>3. Contato</h2>
+    </div>
+    <div class="card-body">
+      <div class="grid cols-2">
+        <div class="field"><label>E-mail para contato</label>
+          <input data-k="email" placeholder="nome@exemplo.com" oninput="onEmail('email')">
+          <span id="status-email" class="cep-status"></span></div>
+        <div class="field"><label>Celular</label>
+          <input data-k="celular" placeholder="(31) 99999-9999" oninput="maskCelular(this);onTel('celular')">
+          <span id="status-celular" class="cep-status"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ LOTES POR ÁREA ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+      <h2>4. Quantidade de Lotes por Área</h2>
+    </div>
+    <div class="card-body">
+      <div class="tbl-scroll">
+        <table class="tbl">
+          <thead><tr><th>Faixa de área</th><th>Quantidade de lotes</th></tr></thead>
+          <tbody>
+            <tr><td>Até 400 m²</td><td><input type="number" min="0" data-k="lote_400" oninput="recalcLotes()"></td></tr>
+            <tr><td>De 400 a 600 m²</td><td><input type="number" min="0" data-k="lote_400_600" oninput="recalcLotes()"></td></tr>
+            <tr><td>Acima de 600 m²</td><td><input type="number" min="0" data-k="lote_600" oninput="recalcLotes()"></td></tr>
+          </tbody>
+          <tfoot><tr><td>Total</td><td id="loteTotal" class="calc">0</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DOCUMENTOS ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+      <h2>5. Documentos Necessários</h2>
+    </div>
+    <div class="card-body">
+      <p class="intro-lead">Marque os documentos que serão anexados ao pedido junto à Cemig (o envio dos arquivos é feito fora deste formulário).</p>
+      <div class="subhead">Obrigatórios</div>
+      <ul class="orient-list">
+        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_planta" style="margin-top:3px"><span>Planta georreferenciada (escala 1:1000) aprovada</span></label></li>
+        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_licenca" style="margin-top:3px"><span>Licença Ambiental ou declaração de não passível de licenciamento</span></label></li>
+        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_infra" style="margin-top:3px"><span>Projeto da infraestrutura essencial (arruamento, meio fio, demarcação dos lotes)</span></label></li>
+        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_ato" style="margin-top:3px"><span>Ato administrativo municipal de aprovação (em caso de Poder Público)</span></label></li>
+      </ul>
+      <div class="subhead">Opcionais</div>
+      <ul class="orient-list">
+        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_cronograma" style="margin-top:3px"><span>Cronograma de entrega com etapas</span></label></li>
+        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_planilha" style="margin-top:3px"><span>Planilha com relação das unidades consumidoras (número predial, identificação das caixas, carga instalada, classificação, disjuntores, cargas especiais)</span></label></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ DECLARAÇÃO ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+      <h2>6. Declaração</h2>
+    </div>
+    <div class="card-body">
+      <p class="intro-lead">Por ser verdade, firmo o presente formulário e me responsabilizo pelas informações nele prestadas, ciente de que a Cemig poderá solicitar documentos complementares para análise do pedido.</p>
+      <label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer"><input type="checkbox" data-k="declaracao" style="margin-top:3px"><span>Declaro que as informações acima são verdadeiras <span class="req">*</span></span></label>
+      <div class="field-note" style="margin-top:10px">Este formulário deve ser assinado pelo responsável legal do empreendimento ou pelo representante do Poder Público, conforme o caso, antes do envio à Cemig.</div>
+    </div>
+  </div>
+
+  <!-- ============ PRÉVIA & PDF ============ -->
+  <div class="card">
+    <div class="card-head">
+      <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+      <h2>7. Prévia &amp; PDF</h2>
+    </div>
+    <div class="card-body">
+      <div class="alert info no-print"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg><div>Clique em "Gerar Prévia" para revisar os dados preenchidos antes de exportar o PDF.</div></div>
+      <div id="previewContent" class="preview-doc"></div>
+      <div class="form-nav"><span></span>
+        <button class="btn btn-ghost no-print" onclick="renderPreview()">Gerar Prévia<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg></button>
+        <button class="btn btn-primary no-print" onclick="exportarPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Exportar PDF</button></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
