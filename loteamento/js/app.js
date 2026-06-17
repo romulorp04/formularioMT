@@ -110,17 +110,10 @@ function alertHTML(tipo,msg){
 
 /* ===== Prévia ===== */
 function pvRow(k,v){const empty=(v==null||v==='');return `<div class="pv-row"><div class="k">${k}</div><div class="v ${empty?'empty':''}">${empty?'—':v}</div></div>`;}
-function listaDocs(){
-  const map={doc_planta:'Planta georreferenciada (1:1000) aprovada',doc_licenca:'Licença Ambiental / declaração de não exigência',
-    doc_infra:'Projeto da infraestrutura essencial',doc_ato:'Ato administrativo municipal de aprovação',
-    doc_cronograma:'Cronograma de entrega com etapas',doc_planilha:'Planilha das unidades consumidoras'};
-  const marcados=Object.keys(map).filter(k=>state[k]).map(k=>map[k]);
-  return marcados.length ? marcados.join('; ') : '';
-}
 function renderPreview(){
   let h=`<div class="pv-title">SOLICITAÇÃO INICIAL DE FORNECIMENTO — LOTEAMENTOS E CHACREAMENTOS</div><div class="pv-section">`;
   h+=`<h4>1. Dados do Empreendimento</h4>`;
-  h+=pvRow('Cliente / Empreendimento',state.cliente)+pvRow('Município / UF',state.municipioUf);
+  h+=pvRow('Cliente / Empreendimento',state.cliente)+pvRow('Município',state.municipio)+pvRow('Estado',state.estado);
   h+=pvRow('Tipo de solicitante',state.tipoSolicitante)+pvRow('Tipo',state.tipo);
   h+=pvRow('Mês/ano de entrada de carga',state.mesAno);
   h+=`<h4>2. Localização</h4>`;
@@ -131,9 +124,7 @@ function renderPreview(){
   h+=`<h4>4. Quantidade de Lotes por Área</h4>`;
   h+=pvRow('Até 400 m²',state.lote_400)+pvRow('De 400 a 600 m²',state.lote_400_600)+pvRow('Acima de 600 m²',state.lote_600);
   h+=pvRow('Total de lotes',(parseInt(state.lote_400)||0)+(parseInt(state.lote_400_600)||0)+(parseInt(state.lote_600)||0));
-  h+=`<h4>5. Documentos marcados</h4>`;
-  h+=pvRow('Documentos',listaDocs());
-  h+=`<h4>6. Declaração</h4>`;
+  h+=`<h4>5. Declaração</h4>`;
   h+=pvRow('Declaração firmada',state.declaracao?'Sim':'Não');
   h+=`</div>`;
   $('#previewContent').innerHTML=h;

@@ -38,8 +38,10 @@
       <div class="grid cols-2">
         <div class="field span-2"><label>Cliente / Empreendimento <span class="req">*</span></label>
           <input data-k="cliente" placeholder="Nome do cliente ou razão social do empreendimento"></div>
-        <div class="field"><label>Município / UF <span class="req">*</span></label>
-          <input data-k="municipioUf" placeholder="Ex.: Belo Horizonte / MG"></div>
+        <div class="field"><label>Município <span class="req">*</span></label>
+          <input type="text" data-k="municipio"></div>
+        <div class="field"><label>Estado <span class="req">*</span></label>
+          <input type="text" data-k="estado" value="MG"></div>
         <div class="field"><label>Tipo de solicitante <span class="req">*</span></label>
           <select data-k="tipoSolicitante"><option value="">Selecione…</option><option>Empreendedor</option><option>Poder Público (Prefeitura)</option></select></div>
         <div class="field"><label>Tipo <span class="req">*</span></label>
@@ -117,18 +119,18 @@
       <h2>5. Documentos Necessários</h2>
     </div>
     <div class="card-body">
-      <p class="intro-lead">Marque os documentos que serão anexados ao pedido junto à Cemig (o envio dos arquivos é feito fora deste formulário).</p>
+      <p class="intro-lead">Os documentos abaixo deverão ser anexados ao pedido junto à Cemig (o envio dos arquivos é feito fora deste formulário).</p>
       <div class="subhead">Obrigatórios</div>
       <ul class="orient-list">
-        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_planta" style="margin-top:3px"><span>Planta georreferenciada (escala 1:1000) aprovada</span></label></li>
-        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_licenca" style="margin-top:3px"><span>Licença Ambiental ou declaração de não passível de licenciamento</span></label></li>
-        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_infra" style="margin-top:3px"><span>Projeto da infraestrutura essencial (arruamento, meio fio, demarcação dos lotes)</span></label></li>
-        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_ato" style="margin-top:3px"><span>Ato administrativo municipal de aprovação (em caso de Poder Público)</span></label></li>
+        <li><span class="bullet">1</span><div>Planta georreferenciada (escala 1:1000) aprovada</div></li>
+        <li><span class="bullet">2</span><div>Licença Ambiental ou declaração de não passível de licenciamento</div></li>
+        <li><span class="bullet">3</span><div>Projeto da infraestrutura essencial (arruamento, meio fio, demarcação dos lotes)</div></li>
+        <li><span class="bullet">4</span><div>Ato administrativo municipal de aprovação (em caso de Poder Público)</div></li>
       </ul>
       <div class="subhead">Opcionais</div>
       <ul class="orient-list">
-        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_cronograma" style="margin-top:3px"><span>Cronograma de entrega com etapas</span></label></li>
-        <li><label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer;width:100%"><input type="checkbox" data-k="doc_planilha" style="margin-top:3px"><span>Planilha com relação das unidades consumidoras (número predial, identificação das caixas, carga instalada, classificação, disjuntores, cargas especiais)</span></label></li>
+        <li><span class="bullet">1</span><div>Cronograma de entrega com etapas</div></li>
+        <li><span class="bullet">2</span><div>Planilha com relação das unidades consumidoras (número predial, identificação das caixas, carga instalada, classificação, disjuntores, cargas especiais)</div></li>
       </ul>
     </div>
   </div>
@@ -141,7 +143,7 @@
     </div>
     <div class="card-body">
       <p class="intro-lead">Por ser verdade, firmo o presente formulário e me responsabilizo pelas informações nele prestadas, ciente de que a Cemig poderá solicitar documentos complementares para análise do pedido.</p>
-      <label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer"><input type="checkbox" data-k="declaracao" style="margin-top:3px"><span>Declaro que as informações acima são verdadeiras <span class="req">*</span></span></label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" data-k="declaracao"><span>Declaro que as informações acima são verdadeiras <span class="req">*</span></span></label>
       <div class="field-note" style="margin-top:10px">Este formulário deve ser assinado pelo responsável legal do empreendimento ou pelo representante do Poder Público, conforme o caso, antes do envio à Cemig.</div>
     </div>
   </div>
